@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { 
-  BarChart3, 
-  PieChart, 
-  LineChart, 
-  Activity, 
-  Globe, 
-  ShieldCheck, 
+import {
+  BarChart3,
+  PieChart,
+  LineChart,
+  Activity,
+  Globe,
+  ShieldCheck,
   ArrowRight,
   Landmark,
   FileText,
@@ -17,12 +17,13 @@ import {
   Moon,
   Filter
 } from 'lucide-react';
-import { 
+import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, ScatterChart, Scatter, ZAxis, Brush
 } from 'recharts';
 import { useTheme } from '../components/ThemeProvider';
 import { cn } from '../lib/utils';
+import HeroMagazineSpread from '../components/HeroMagazineSpread';
 
 const COLORS = ['#D4AF37', '#1E4D2B', '#4ade80', '#facc15', '#60a5fa'];
 
@@ -165,8 +166,8 @@ const ChartCarousel = () => {
           <AreaChart data={filteredArea}>
             <defs>
               <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
@@ -249,7 +250,7 @@ const ChartCarousel = () => {
   }, [charts.length, isHovered]);
 
   return (
-    <div 
+    <div
       className="relative w-full h-[450px] lg:h-[550px] glass-panel p-6 overflow-hidden flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -261,9 +262,9 @@ const ChartCarousel = () => {
               {charts[currentIndex].title}
             </span>
             <div className="pointer-events-none text-muted">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </div>
-            <select 
+            <select
               value={currentIndex}
               onChange={(e) => setCurrentIndex(Number(e.target.value))}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -283,9 +284,9 @@ const ChartCarousel = () => {
                 {timeframe === 'YTD' ? 'YTD' : timeframe === '1Y' ? '1 Year' : '5 Years'}
               </span>
               <div className="pointer-events-none text-muted">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
               </div>
-              <select 
+              <select
                 value={timeframe}
                 onChange={(e) => setTimeframe(e.target.value)}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -303,15 +304,14 @@ const ChartCarousel = () => {
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 aria-label={`View chart ${idx + 1}`}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  idx === currentIndex ? 'bg-brand-gold w-6' : 'bg-foreground/20'
-                }`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? 'bg-brand-gold w-6' : 'bg-foreground/20'
+                  }`}
               />
             ))}
           </div>
         </div>
       </div>
-      
+
       <div className="flex-1 relative z-10 w-full h-full">
         <AnimatePresence mode="wait">
           <motion.div
@@ -334,6 +334,100 @@ const ChartCarousel = () => {
   );
 };
 
+const Typewriter = ({ className }: { className?: string }) => {
+  const [parts, setParts] = useState<{ text: string, className: string }[]>([]);
+  const isActiveRef = useRef(true);
+
+  useEffect(() => {
+    isActiveRef.current = true;
+    setParts([]); // Reset to prevent double typing in React StrictMode
+
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const phrases = [
+      { text: "Unified Finance.", className: "text-gradient-gold" },
+      { text: " Smarter Planning.", className: "text-gradient-green" },
+      { text: " Stronger Delivery.", className: "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500" }
+    ];
+
+    const standalonePhrases = [
+      { text: "Unified Finance.", className: "text-gradient-gold" },
+      { text: "Smarter Planning.", className: "text-gradient-green" },
+      { text: "Stronger Delivery.", className: "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500" }
+    ];
+
+    const typeText = async (textToType: string, className: string) => {
+      setParts(prev => [...prev, { text: '', className }]);
+      for (let i = 1; i <= textToType.length; i++) {
+        if (!isActiveRef.current) return;
+        setParts(prev => {
+          const newParts = [...prev];
+          newParts[newParts.length - 1] = { ...newParts[newParts.length - 1], text: textToType.slice(0, i) };
+          return newParts;
+        });
+        await delay(40);
+      }
+    };
+
+    const deleteLastPart = async () => {
+      let textLength = 0;
+      setParts(prev => {
+        textLength = prev[prev.length - 1]?.text.length || 0;
+        return prev;
+      });
+
+      for (let i = textLength - 1; i >= 0; i--) {
+        if (!isActiveRef.current) return;
+        setParts(prev => {
+          const newParts = [...prev];
+          if (newParts.length > 0) {
+            newParts[newParts.length - 1] = { ...newParts[newParts.length - 1], text: newParts[newParts.length - 1].text.slice(0, i) };
+          }
+          return newParts;
+        });
+        await delay(25);
+      }
+      setParts(prev => prev.slice(0, prev.length - 1));
+    };
+
+    const runSequence = async () => {
+      // --- PHASE 1: Bring in the entire title (Runs Once) ---
+      await typeText(phrases[0].text, phrases[0].className);
+      await typeText(phrases[1].text, phrases[1].className);
+      await typeText(phrases[2].text, phrases[2].className);
+
+      while (isActiveRef.current) {
+        await delay(5000); // Wait 5 seconds
+        if (!isActiveRef.current) return;
+
+        // --- PHASE 2: Repeat only on "Stronger Delivery." (Loops Continuously) ---
+        await deleteLastPart(); // Deletes " Stronger Delivery."
+        await delay(500);
+        await typeText(phrases[2].text, phrases[2].className); // Retypes " Stronger Delivery."
+      }
+    };
+
+    runSequence();
+
+    return () => {
+      isActiveRef.current = false;
+    };
+  }, []);
+
+  return (
+    <span className={cn(className, "relative inline-block")}>
+      {parts.map((p, i) => (
+        <span key={i} className={p.className}>{p.text}</span>
+      ))}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+        className="inline-block w-[4px] h-[1em] bg-brand-gold ml-1 -mb-1 align-middle"
+      />
+    </span>
+  );
+};
+
 export default function LandingPage() {
   const { theme, setTheme } = useTheme();
 
@@ -343,14 +437,19 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass-panel !rounded-none !border-x-0 !border-t-0 !border-b-border/50 bg-background/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-green to-brand-green-dark flex items-center justify-center border border-brand-gold/30 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-              <Landmark className="text-brand-gold w-5 h-5" />
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center border border-brand-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.3)] shrink-0">
+              <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover" />
             </div>
-            <span className="text-xl font-serif font-semibold tracking-wide text-foreground">
-              LIFEDge<span className="text-brand-gold">One</span>
-            </span>
+            <div className="flex flex-col justify-center">
+              <span className="text-xl font-serif font-semibold tracking-wide text-foreground leading-tight">
+                TRA<span className="text-brand-gold">CE</span>
+              </span>
+              <span className="text-[10px] text-muted font-medium hidden sm:block tracking-wide mt-0.5">
+                Transparent Resource Allocation, Control & Execution
+              </span>
+            </div>
           </div>
-          
+
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
             <a href="#modules" className="hover:text-foreground transition-colors">Modules</a>
             <a href="#architecture" className="hover:text-foreground transition-colors">Architecture</a>
@@ -384,7 +483,7 @@ export default function LandingPage() {
 
         <div className="grid lg:grid-cols-2 gap-16 items-center w-full relative z-10">
           {/* Left: Content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -394,18 +493,15 @@ export default function LandingPage() {
               <ShieldCheck className="w-3.5 h-3.5" />
               Sovereign-Grade Digital OS
             </div>
-            
-            <h1 className="text-5xl lg:text-7xl font-serif font-medium leading-[1.1] tracking-tight text-foreground">
-              One Platform to Govern <br/>
-              <span className="text-gradient-gold">Budget Authority,</span><br/>
-              <span className="text-gradient-green">National Finance,</span><br/>
-              & Development Delivery.
+
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-serif font-medium leading-[1.2] tracking-tight min-h-[100px] md:min-h-[120px] xl:min-h-[140px]">
+              <Typewriter />
             </h1>
-            
+
             <p className="text-lg text-muted leading-relaxed max-w-xl font-light">
-              A secure, intelligent, and interoperable enterprise platform unifying budget formulation, allotment control, treasury, debt, aid, procurement, revenue intelligence, assets, macroeconomic forecasting, MAC oversight, SOE reporting, and public investment delivery into one national command environment.
+              A secure national platform for budget authority, treasury control, oversight, and development execution.
             </p>
-            
+
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <Link to="/login" className="px-8 py-4 bg-foreground text-background rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
                 Access Command Center
@@ -416,44 +512,35 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* Right: Carousel */}
+          {/* Right: Magazine Spread Layout */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="relative"
+            className="relative w-full h-full min-h-[500px] hidden lg:block"
           >
-            <ChartCarousel />
-            
-            {/* Floating decorative elements */}
-            <motion.div 
-              animate={{ y: [0, -10, 0] }} 
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute -top-6 -right-6 glass-panel p-4 flex items-center gap-3 z-20"
-            >
-              <div className="w-8 h-8 rounded-full bg-brand-green/20 flex items-center justify-center">
-                <Activity className="w-4 h-4 text-brand-green" />
-              </div>
-              <div>
-                <p className="text-xs text-muted uppercase tracking-wider">Live Execution</p>
-                <p className="text-sm font-medium text-foreground">98.4% Sync Rate</p>
-              </div>
-            </motion.div>
-
-            <motion.div 
-              animate={{ y: [0, 10, 0] }} 
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-              className="absolute -bottom-6 -left-6 glass-panel p-4 flex items-center gap-3 z-20"
-            >
-              <div className="w-8 h-8 rounded-full bg-brand-gold/20 flex items-center justify-center">
-                <Globe className="w-4 h-4 text-brand-gold" />
-              </div>
-              <div>
-                <p className="text-xs text-muted uppercase tracking-wider">Aid Management</p>
-                <p className="text-sm font-medium text-foreground">$450M Tracked</p>
-              </div>
-            </motion.div>
+            <HeroMagazineSpread />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-6 relative z-10 bg-background border-t border-border/50 mt-12 md:mt-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center glass-panel p-10 rounded-3xl relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-gold via-brand-green to-brand-gold opacity-50"></div>
+            {[
+              { label: "Total Budget Managed", value: "$3.2B+" },
+              { label: "Ministries & Agencies", value: "85+" },
+              { label: "Real-time Sync", value: "99.9%" },
+              { label: "Projects Tracked", value: "1,200+" }
+            ].map((stat, idx) => (
+              <div key={idx} className="flex flex-col gap-3 relative z-10">
+                <span className="text-4xl md:text-5xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-foreground to-foreground/70">{stat.value}</span>
+                <span className="text-xs md:text-sm text-muted font-medium uppercase tracking-widest">{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -474,7 +561,7 @@ export default function LandingPage() {
               { icon: <BarChart3 />, title: "Revenue Intelligence", desc: "Tax and customs data integration for fiscal planning." },
               { icon: <ShieldCheck />, title: "MAC & SOE Oversight", desc: "Performance scorecards, financial submissions, and risk." }
             ].map((mod, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -494,22 +581,57 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border/50 bg-background relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3">
-            <Landmark className="text-brand-gold w-6 h-6" />
-            <span className="text-lg font-serif font-semibold text-foreground">
-              LIFEDge<span className="text-brand-gold">One</span>
-            </span>
+      <footer className="py-16 px-6 border-t border-border/50 bg-background relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          <div className="col-span-1 md:col-span-2">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center border border-brand-gold/50 shadow-sm">
+                <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover" />
+              </div>
+              <span className="text-2xl font-serif font-semibold text-foreground tracking-wide">
+                TRA<span className="text-brand-gold">CE</span>
+              </span>
+            </div>
+            <p className="text-muted max-w-md leading-relaxed mb-8 text-sm md:text-base">
+              Empowering the nation through intelligent financial management, transparent oversight, robust development execution, and macroeconomic visibility.
+            </p>
+            <div className="flex gap-4">
+              <a href="#" className="w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center hover:bg-brand-gold/20 hover:text-brand-gold transition-all duration-300">
+                <Globe className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center hover:bg-brand-gold/20 hover:text-brand-gold transition-all duration-300">
+                <ShieldCheck className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center hover:bg-brand-gold/20 hover:text-brand-gold transition-all duration-300">
+                <FileText className="w-5 h-5" />
+              </a>
+            </div>
           </div>
-          <p className="text-sm text-muted">
-            &copy; {new Date().getFullYear()} Ministry of Finance and Development Planning, Liberia. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-sm text-muted">
-            <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
-            <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
+          <div>
+            <h4 className="font-semibold text-foreground mb-6 uppercase tracking-wider text-xs md:text-sm">Platform Core</h4>
+            <div className="flex flex-col gap-4 text-muted text-sm border-l border-border/50 pl-4">
+              <a href="#modules" className="hover:text-brand-gold transition-colors block">Module Ecosystem</a>
+              <a href="#architecture" className="hover:text-brand-gold transition-colors block">Enterprise Architecture</a>
+              <a href="#security" className="hover:text-brand-gold transition-colors block">Security & Compliance</a>
+              <a href="#" className="hover:text-brand-gold transition-colors block">Interoperability API</a>
+            </div>
+          </div>
+          <div>
+            <h4 className="font-semibold text-foreground mb-6 uppercase tracking-wider text-xs md:text-sm">Resources</h4>
+            <div className="flex flex-col gap-4 text-muted text-sm border-l border-border/50 pl-4">
+              <a href="#" className="hover:text-brand-gold transition-colors block">Knowledge Base</a>
+              <a href="#" className="hover:text-brand-gold transition-colors block">Training Portal</a>
+              <a href="#" className="hover:text-brand-gold transition-colors block">Support Desk</a>
+              <a href="#" className="hover:text-brand-gold transition-colors block">System Status</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 pt-8 border-t border-border/50 text-sm text-muted">
+          <p>&copy; {new Date().getFullYear()} Ministry of Finance and Development Planning, Liberia. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
           </div>
         </div>
       </footer>

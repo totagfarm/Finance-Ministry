@@ -67,7 +67,7 @@ export default function SystemSettings() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Application Name</label>
-                      <input type="text" defaultValue="LIFedge One" className="w-full bg-foreground/5 border border-border rounded-lg px-4 py-2 text-sm text-foreground focus:outline-none focus:border-brand-gold transition-colors" />
+                      <input type="text" defaultValue="TRACE" className="w-full bg-foreground/5 border border-border rounded-lg px-4 py-2 text-sm text-foreground focus:outline-none focus:border-brand-gold transition-colors" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Fiscal Year Start</label>
@@ -135,7 +135,7 @@ export default function SystemSettings() {
                 <Settings className="w-12 h-12 text-muted mb-4 opacity-20" />
                 <h3 className="text-lg font-medium text-foreground mb-2">Configuration Pending</h3>
                 <p className="text-sm text-muted max-w-md">
-                  Settings for {activeTab} are currently being configured for the LIFedge One environment.
+                  Settings for {activeTab} are currently being configured for the TRACE environment.
                 </p>
               </div>
             )}

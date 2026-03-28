@@ -1,163 +1,150 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { Users, Shield, Key, Search, Filter, Plus, MoreVertical, CheckCircle, XCircle, Mail } from 'lucide-react';
-import { cn } from '../../lib/utils';
 import { useTheme } from '../../components/ThemeProvider';
+import { AgGridReact } from 'ag-grid-react';
+import { ColDef, ModuleRegistry, ClientSideRowModelModule } from 'ag-grid-community';
+import { Shield, Key, Search, FileKey, CheckCircle2, XCircle, Clock, Download, Plus } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { Link } from 'react-router-dom';
 
-const mockUsers = [
-  { id: 'USR-001', name: 'Amara Konneh', email: 'akonneh@mfdp.gov.lr', role: 'Minister', department: 'MFDP', status: 'Active', lastLogin: '2 mins ago' },
-  { id: 'USR-002', name: 'Boima Kamara', email: 'bkamara@mfdp.gov.lr', role: 'Deputy Minister', department: 'Fiscal Affairs', status: 'Active', lastLogin: '1 hour ago' },
-  { id: 'USR-003', name: 'Tete Antonio', email: 'tantonio@mfdp.gov.lr', role: 'Comptroller General', department: 'CAG', status: 'Active', lastLogin: '3 hours ago' },
-  { id: 'USR-004', name: 'Samuel Tweah', email: 'stweah@mfdp.gov.lr', role: 'Budget Director', department: 'Budget', status: 'Inactive', lastLogin: '2 days ago' },
-  { id: 'USR-005', name: 'Decontee King-Sackie', email: 'dksackie@lra.gov.lr', role: 'Commissioner General', department: 'LRA', status: 'Active', lastLogin: '5 mins ago' },
-];
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
+
+interface UserRecord {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  institution: string;
+  clearance: 'LACC Verified' | 'Pending Audit' | 'Revoked';
+  status: 'Active' | 'Locked';
+  lastLogin: string;
+}
 
 export default function UserManagement() {
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
-  const [activeTab, setActiveTab] = useState('users');
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  const [rowData] = useState<UserRecord[]>([
+    { id: 'UID-1001', name: 'Alexander B. Cummings', email: 'acummings@emansion.gov.lr', role: 'Executive Override', institution: 'Executive Mansion', clearance: 'LACC Verified', status: 'Active', lastLogin: '10 mins ago' },
+    { id: 'UID-1002', name: 'Boima S. Kamara', email: 'bkamara@mfdp.gov.lr', role: 'System Administrator (Finance)', institution: 'Ministry of Finance', clearance: 'LACC Verified', status: 'Active', lastLogin: '1 hour ago' },
+    { id: 'UID-1003', name: 'Samuel D. Tweah', email: 'stweah@mfdp.gov.lr', role: 'Budget Director', institution: 'Ministry of Finance', clearance: 'Pending Audit', status: 'Locked', lastLogin: '45 days ago' },
+    { id: 'UID-1004', name: 'Dorbor Jallah', email: 'djallah@lra.gov.lr', role: 'Revenue Commissioner', institution: 'Liberia Revenue Authority', clearance: 'LACC Verified', status: 'Active', lastLogin: '5 mins ago' },
+    { id: 'UID-1005', name: 'Cllr. Alexandra Zoe', email: 'azoe@lacc.gov.lr', role: 'Chief Auditor (Read-Only)', institution: 'Liberia Anti-Corruption Commission', clearance: 'LACC Verified', status: 'Active', lastLogin: '3 days ago' },
+  ]);
+
+  const clearanceCellRenderer = (params: any) => {
+    const clearance = params.value;
+    return (
+       <div className="flex items-center h-full">
+         <span className={cn(
+            "px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md inline-flex items-center gap-1",
+            clearance === 'LACC Verified' ? "bg-brand-green/20 text-brand-green" :
+            clearance === 'Revoked' ? "bg-red-500/20 text-red-500" :
+            "bg-orange-500/20 text-orange-500"
+          )}>
+            {clearance === 'LACC Verified' && <CheckCircle2 className="w-3 h-3" />}
+            {clearance === 'Revoked' && <XCircle className="w-3 h-3" />}
+            {clearance === 'Pending Audit' && <Clock className="w-3 h-3" />}
+            {clearance}
+          </span>
+       </div>
+    );
+  };
+  
+  const statusCellRenderer = (params: any) => {
+    const status = params.value;
+    return (
+      <span className={cn(
+        "px-2 py-0.5 rounded text-xs font-medium uppercase tracking-wider inline-flex items-center gap-1 mt-2.5",
+        status === 'Active' ? "text-brand-green bg-brand-green/10" : "text-red-500 bg-red-500/10"
+      )}>
+        {status}
+      </span>
+    );
+  };
+
+  const [colDefs] = useState<ColDef<UserRecord>[]>([
+    { field: 'id', headerName: 'Network ID', width: 130, pinned: 'left', cellClass: 'font-mono text-xs text-brand-gold' },
+    { field: 'name', headerName: 'Official Name', width: 200, cellClass: 'font-medium text-foreground' },
+    { field: 'role', headerName: 'System Role', width: 220 },
+    { field: 'institution', headerName: 'Governing Body', width: 250 },
+    { field: 'clearance', headerName: 'Background Check', width: 170, cellRenderer: clearanceCellRenderer },
+    { field: 'status', headerName: 'Access', width: 120, cellRenderer: statusCellRenderer },
+    { field: 'lastLogin', headerName: 'Last Authentication', width: 180, cellClass: 'text-muted text-xs' },
+  ]);
+
+  const defaultColDef = useMemo(() => ({
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellStyle: { fontSize: '13px', display: 'flex', alignItems: 'center' }
+  }), []);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto pb-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-serif font-medium text-foreground">User Management</h1>
-          <p className="text-sm text-muted mt-1">Manage user accounts, roles, and permissions</p>
+          <h2 className="text-xl font-serif font-medium text-foreground">Active Directory (GoL)</h2>
+          <p className="text-sm text-muted mt-1">Manage physical users, 2FA profiles, and underlying system permissions.</p>
         </div>
         <div className="flex items-center gap-3">
+          <Link 
+            to="/app/admin/security/new-role"
+            className="px-4 py-2 bg-brand-gold text-brand-dark rounded-lg text-sm font-bold hover:bg-brand-gold-dark flex items-center gap-2 transition-colors shadow-[0_4px_15px_rgba(234,179,8,0.3)]"
+          >
+            <Plus className="w-4 h-4" /> Provision User Access
+          </Link>
+        </div>
+      </div>
+
+      {/* Grid Area */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="glass-panel flex flex-col min-h-[500px]"
+      >
+        <div className="p-4 border-b border-border flex justify-between items-center bg-foreground/5 shrink-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
             <input 
               type="text" 
-              placeholder="Search users..." 
-              className="pl-9 pr-4 py-2 bg-foreground/5 border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-brand-gold transition-colors w-64"
+              placeholder="Search by Name or Network ID..." 
+              className="pl-9 pr-4 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-brand-gold transition-colors w-64 lg:w-80"
             />
           </div>
-          <button className="p-2 bg-foreground/5 border border-border rounded-lg text-muted hover:text-foreground transition-colors">
-            <Filter className="w-4 h-4" />
-          </button>
-          <button className="px-4 py-2 bg-brand-gold text-brand-dark rounded-lg text-sm font-medium hover:bg-brand-gold/90 transition-colors flex items-center gap-2">
-            <Plus className="w-4 h-4" /> Add User
+          <button className="text-xs font-medium text-brand-gold hover:text-brand-gold-dark transition-colors flex items-center gap-1">
+             <Download className="w-4 h-4"/> Export Audit List
           </button>
         </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex items-center gap-6 border-b border-border">
-        {[
-          { id: 'users', label: 'Users' },
-          { id: 'roles', label: 'Roles & Permissions' },
-          { id: 'audit', label: 'Audit Logs' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "pb-3 text-sm font-medium transition-colors relative",
-              activeTab === tab.id ? "text-brand-gold" : "text-muted hover:text-foreground"
-            )}
-          >
-            {tab.label}
-            {activeTab === tab.id && (
-              <motion.div 
-                layoutId="activeTab" 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold" 
-              />
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab Content */}
-      <div className="mt-6">
-        {activeTab === 'users' && (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
-          >
-            {/* Top KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { label: 'Total Users', value: '1,245', icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                { label: 'Active Sessions', value: '342', icon: Shield, color: 'text-brand-green', bg: 'bg-brand-green/10' },
-                { label: 'Pending Approvals', value: '12', icon: Key, color: 'text-orange-500', bg: 'bg-orange-500/10' },
-              ].map((kpi, idx) => (
-                <div key={idx} className="glass-panel p-4 flex items-center gap-4">
-                  <div className={cn("p-3 rounded-lg", kpi.bg)}>
-                    <kpi.icon className={cn("w-6 h-6", kpi.color)} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground">{kpi.value}</h3>
-                    <p className="text-xs font-medium text-muted uppercase tracking-wider">{kpi.label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Users Table */}
-            <div className="glass-panel overflow-hidden">
-              <div className="p-4 border-b border-border bg-foreground/5 flex justify-between items-center">
-                <h3 className="font-medium text-sm text-foreground">User Directory</h3>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="text-xs text-muted uppercase bg-foreground/5 border-b border-border">
-                    <tr>
-                      <th className="px-4 py-3 font-medium">Name / Email</th>
-                      <th className="px-4 py-3 font-medium">Role</th>
-                      <th className="px-4 py-3 font-medium">Department</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
-                      <th className="px-4 py-3 font-medium">Last Login</th>
-                      <th className="px-4 py-3 font-medium text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/50">
-                    {mockUsers.map((user, idx) => (
-                      <tr key={idx} className="hover:bg-foreground/5 transition-colors cursor-pointer">
-                        <td className="px-4 py-3">
-                          <div className="font-medium text-foreground">{user.name}</div>
-                          <div className="text-xs text-muted flex items-center gap-1 mt-0.5">
-                            <Mail className="w-3 h-3" /> {user.email}
-                          </div>
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className="px-2 py-1 bg-foreground/10 text-foreground text-xs font-medium rounded-md">
-                            {user.role}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-muted">{user.department}</td>
-                        <td className="px-4 py-3">
-                          <span className={cn(
-                            "px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider rounded-md inline-flex items-center gap-1",
-                            user.status === 'Active' ? "bg-brand-green/20 text-brand-green" : "bg-red-500/20 text-red-500"
-                          )}>
-                            {user.status === 'Active' ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                            {user.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-muted text-xs">{user.lastLogin}</td>
-                        <td className="px-4 py-3 text-right">
-                          <button className="p-1 text-muted hover:text-foreground transition-colors rounded-md hover:bg-foreground/10">
-                            <MoreVertical className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Placeholders for other tabs */}
-        {activeTab !== 'users' && (
-          <div className="glass-panel p-12 text-center">
-            <p className="text-muted">Content for {activeTab} will be displayed here.</p>
-          </div>
-        )}
-      </div>
+        <div 
+          className={cn(
+            "flex-1 w-full",
+            isDark ? "ag-theme-quartz-dark" : "ag-theme-quartz"
+          )}
+          style={{ 
+            '--ag-background-color': 'transparent', 
+            '--ag-header-background-color': 'rgba(255,255,255,0.02)',
+            '--ag-border-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+            '--ag-row-border-color': isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            '--ag-odd-row-background-color': 'transparent',
+            '--ag-header-foreground-color': isDark ? '#facc15' : '#ca8a04',
+            '--ag-header-font-weight': '600',
+            '--ag-font-family': 'Inter, system-ui, sans-serif'
+          } as React.CSSProperties}
+        >
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={colDefs}
+            defaultColDef={defaultColDef}
+            animateRows={true}
+            domLayout="autoHeight"
+          />
+        </div>
+      </motion.div>
     </div>
   );
 }

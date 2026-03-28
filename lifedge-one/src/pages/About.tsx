@@ -17,7 +17,7 @@ export default function About() {
               <Landmark className="text-brand-gold w-5 h-5" />
             </div>
             <span className="text-xl font-serif font-semibold tracking-wide text-foreground">
-              LIFEDge<span className="text-brand-gold">One</span>
+              TRA<span className="text-brand-gold">CE</span>
             </span>
           </Link>
           <Link to="/" className="flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground transition-colors">
@@ -33,17 +33,17 @@ export default function About() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-4xl md:text-5xl font-serif font-medium text-foreground mb-6">
-            About LIFEDge One
+            About TRACE
           </h1>
           <p className="text-xl text-muted font-light leading-relaxed mb-12">
-            The Liberia Integrated Financial and Economic Data edge (LIFEDge One) is the sovereign digital operating system for the Ministry of Finance and Development Planning.
+            The Transparent Resource Allocation, Control & Execution (TRACE) is the sovereign digital operating system for the Ministry of Finance and Development Planning.
           </p>
 
           <div className="space-y-12">
             <section>
               <h2 className="text-2xl font-serif font-medium text-foreground mb-4">Our Mission</h2>
               <p className="text-muted leading-relaxed">
-                To consolidate and orchestrate existing siloed finance, planning, oversight, and development workflows into a single, unified national command environment. LIFEDge One ensures transparency, accountability, and efficiency in the management of public resources.
+                To consolidate and orchestrate existing siloed finance, planning, oversight, and development workflows into a single, unified national command environment. TRACE ensures transparency, accountability, and efficiency in the management of public resources.
               </p>
             </section>
 
@@ -68,7 +68,7 @@ export default function About() {
             <section>
               <h2 className="text-2xl font-serif font-medium text-foreground mb-4">The Platform</h2>
               <p className="text-muted leading-relaxed mb-4">
-                LIFEDge One is not merely a collection of modules; it is an interoperable command environment. It visibly preserves the real functional behaviors of existing systems while providing a modernized, unified interface.
+                TRACE is not merely a collection of modules; it is an interoperable command environment. It visibly preserves the real functional behaviors of existing systems while providing a modernized, unified interface.
               </p>
               <p className="text-muted leading-relaxed">
                 From budget preparation handoffs to execution, allotment controls, and EFT payment execution, every workflow is digitized, tracked, and auditable.

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, FileText, Building2, Briefcase, X, Folder, Clock, Star } from 'lucide-react';
+import { Search, FileText, Building2, Briefcase, X, Folder, Clock, Star, Globe, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface CommandPaletteProps {
@@ -9,10 +9,16 @@ interface CommandPaletteProps {
 }
 
 const mockResults = [
-  { id: '1', type: 'screen', title: 'Budget Execution Report', icon: FileText, path: '/app/finance' },
-  { id: '2', type: 'institution', title: 'Ministry of Health', icon: Building2, path: '/app/admin' },
-  { id: '3', type: 'project', title: 'National Highway Expansion', icon: Briefcase, path: '/app/development' },
-  { id: '4', type: 'document', title: 'Q3 Financial Statement', icon: Folder, path: '/app/finance' },
+  { id: '1', type: 'module', title: 'Institution Master', icon: Building2, path: '/app/institutions' },
+  { id: '2', type: 'module', title: 'Budget Formulation', icon: FileText, path: '/app/finance/budget' },
+  { id: '3', type: 'module', title: 'Appropriations Registry', icon: FileText, path: '/app/finance/appropriations' },
+  { id: '4', type: 'module', title: 'Allotment Control', icon: FileText, path: '/app/finance/allotments/new' },
+  { id: '5', type: 'module', title: 'Treasury & EFT', icon: Briefcase, path: '/app/finance/treasury' },
+  { id: '6', type: 'module', title: 'Revenue Intelligence', icon: FileText, path: '/app/finance/revenue' },
+  { id: '7', type: 'module', title: 'Aid Management', icon: Globe, path: '/app/development/aid' },
+  { id: '8', type: 'module', title: 'MAC Oversight', icon: Shield, path: '/app/oversight/mac' },
+  { id: '9', type: 'module', title: 'Macroeconomic Model', icon: Search, path: '/app/macro' },
+  { id: '10', type: 'module', title: 'Document Center', icon: Folder, path: '/app/documents' },
 ];
 
 const recentSearches = [

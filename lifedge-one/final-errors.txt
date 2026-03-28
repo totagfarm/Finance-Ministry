@@ -1,0 +1,5 @@
+old_landing.tsx(24,26): error TS2307: Cannot find module '../components/ThemeProvider' or its corresponding type declarations.
+old_landing.tsx(25,20): error TS2307: Cannot find module '../lib/utils' or its corresponding type declarations.
+old_landing_utf8.tsx(24,26): error TS2307: Cannot find module '../components/ThemeProvider' or its corresponding type declarations.
+old_landing_utf8.tsx(25,20): error TS2307: Cannot find module '../lib/utils' or its corresponding type declarations.
+src/components/RoleSwitcherModal.tsx(98,30): error TS2339: Property 'map' does not exist on type 'unknown'.

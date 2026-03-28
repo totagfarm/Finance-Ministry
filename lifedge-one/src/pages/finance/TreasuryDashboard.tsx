@@ -33,6 +33,34 @@ export default function TreasuryDashboard() {
         </div>
       </div>
 
+      {/* Treasury Hub Links */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[
+          { title: "Payment Dispatch Run", desc: "Select and transmit verified vouchers to the Central Bank.", route: "/app/finance/treasury/dispatch", icon: DollarSign, color: "brand-gold" },
+          { title: "EFT Execution Monitor", desc: "Track batch statuses and straight-through bank processing.", route: "/app/finance/treasury/eft", icon: Activity, color: "blue-500" }
+        ].map((module, idx) => (
+          <motion.div 
+            key={idx}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+            className="glass-panel p-6 flex flex-col justify-between group hover:border-brand-gold/50 cursor-pointer transition-colors"
+            onClick={() => window.location.href = module.route}
+          >
+            <div>
+              <div className={`p-3 bg-foreground/5 rounded-xl w-fit mb-4 group-hover:bg-${module.color}/10 transition-colors`}>
+                <module.icon className={`w-6 h-6 text-muted group-hover:text-${module.color} transition-colors`} />
+              </div>
+              <h3 className="text-lg font-medium text-foreground mb-1">{module.title}</h3>
+              <p className="text-sm text-muted">{module.desc}</p>
+            </div>
+            <div className="mt-6 flex items-center gap-2 text-sm font-medium text-brand-gold group-hover:text-brand-gold-dark transition-colors">
+              Access Workspace <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
       {/* Top KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[

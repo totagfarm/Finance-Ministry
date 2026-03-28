@@ -8,7 +8,7 @@ const DEMO_ACCOUNTS = [
   { role: 'Budget Officer', email: 'budget@mfdp.gov.lr', name: 'Sarah Doe' },
   { role: 'Aid Coordinator', email: 'aid@mfdp.gov.lr', name: 'John Smith' },
   { role: 'Auditor', email: 'audit@mfdp.gov.lr', name: 'Jane Doe' },
-  { role: 'System Admin', email: 'admin@lifedge.gov.lr', name: 'Admin User' }
+  { role: 'System Admin', email: 'admin@trace.gov.lr', name: 'Admin User' }
 ];
 
 export default function Login() {
@@ -23,8 +23,8 @@ export default function Login() {
     const role = account ? account.role : 'Minister';
     const name = account ? account.name : 'Demo User';
     
-    localStorage.setItem('lifedge-demo-role', role);
-    localStorage.setItem('lifedge-demo-name', name);
+    localStorage.setItem('trace-demo-role', role);
+    localStorage.setItem('trace-demo-name', name);
     navigate('/app');
   };
 
@@ -50,7 +50,7 @@ export default function Login() {
               <Landmark className="text-brand-gold w-5 h-5" />
             </div>
             <span className="text-xl font-serif font-semibold tracking-wide text-white">
-              LIFEDge<span className="text-brand-gold">One</span>
+              TRA<span className="text-brand-gold">CE</span>
             </span>
           </Link>
           
@@ -72,7 +72,7 @@ export default function Login() {
             <Landmark className="text-brand-gold w-4 h-4" />
           </div>
           <span className="text-lg font-serif font-semibold tracking-wide text-foreground">
-            LIFEDge<span className="text-brand-gold">One</span>
+            TRA<span className="text-brand-gold">CE</span>
           </span>
         </Link>
 
@@ -84,7 +84,7 @@ export default function Login() {
         >
           <div className="mb-10">
             <h1 className="text-3xl font-serif font-medium text-foreground mb-2">Welcome Back</h1>
-            <p className="text-muted">Sign in to your LIFEDge One account</p>
+            <p className="text-muted">Sign in to your TRACE account</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -97,7 +97,7 @@ export default function Login() {
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@mfdp.gov.lr" 
+                  placeholder="name@trace.gov.lr" 
                   className="w-full pl-10 pr-4 py-3 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-brand-gold transition-colors"
                   required
                 />

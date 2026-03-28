@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Landmark, ArrowRight, Mail, Lock, User, Building } from 'lucide-react';
+import { Landmark, ArrowRight, Mail, Lock, User, Building, Network } from 'lucide-react';
+import { INSTITUTION_CATEGORIES, MOCK_INSTITUTIONS } from '../../config/institutions.config';
 
 export default function Register() {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+
+  const filteredInstitutions = MOCK_INSTITUTIONS.filter(inst => inst.categoryId === selectedCategory && inst.isActive);
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +32,7 @@ export default function Register() {
               <Landmark className="text-brand-gold w-5 h-5" />
             </div>
             <span className="text-xl font-serif font-semibold tracking-wide text-white">
-              LIFEDge<span className="text-brand-gold">One</span>
+              TRA<span className="text-brand-gold">CE</span>
             </span>
           </Link>
           
@@ -50,7 +54,7 @@ export default function Register() {
             <Landmark className="text-brand-gold w-4 h-4" />
           </div>
           <span className="text-lg font-serif font-semibold tracking-wide text-foreground">
-            LIFEDge<span className="text-brand-gold">One</span>
+            TRA<span className="text-brand-gold">CE</span>
           </span>
         </Link>
 
@@ -102,30 +106,58 @@ export default function Register() {
                 <input 
                   id="email"
                   type="email" 
-                  placeholder="name@mfdp.gov.lr" 
+                  placeholder="name@gov.lr" 
                   className="w-full pl-10 pr-4 py-3 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-brand-gold transition-colors"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground" htmlFor="ministry">Ministry / Agency</label>
-              <div className="relative">
-                <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
-                <select 
-                  id="ministry"
-                  className="w-full pl-10 pr-4 py-3 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-brand-gold transition-colors appearance-none"
-                  required
-                  defaultValue=""
-                >
-                  <option value="" disabled>Select your institution...</option>
-                  <option value="mfdp">Ministry of Finance and Development Planning</option>
-                  <option value="moh">Ministry of Health</option>
-                  <option value="moe">Ministry of Education</option>
-                  <option value="mopw">Ministry of Public Works</option>
-                  <option value="other">Other MAC</option>
-                </select>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground" htmlFor="category">Institutional Classification</label>
+                <div className="relative">
+                  <Network className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
+                  <select 
+                    id="category"
+                    className="w-full pl-10 pr-4 py-3 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-brand-gold transition-colors appearance-none"
+                    required
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    <option value="" disabled>Select institutional category...</option>
+                    {INSTITUTION_CATEGORIES.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground" htmlFor="institution">Specific Institution / Agency</label>
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
+                  <select 
+                    id="institution"
+                    className="w-full pl-10 pr-4 py-3 bg-foreground/5 border border-border rounded-xl text-foreground focus:outline-none focus:border-brand-gold transition-colors appearance-none disabled:opacity-50"
+                    required
+                    defaultValue=""
+                    disabled={!selectedCategory || filteredInstitutions.length === 0}
+                  >
+                    <option value="" disabled>
+                      {!selectedCategory 
+                        ? "Select a category first..." 
+                        : filteredInstitutions.length === 0 
+                          ? "No institutions found" 
+                          : "Select your institution..."}
+                    </option>
+                    {filteredInstitutions.map(inst => (
+                      <option key={inst.id} value={inst.id}>
+                        {inst.acronym ? `${inst.acronym} - ` : ''}{inst.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 

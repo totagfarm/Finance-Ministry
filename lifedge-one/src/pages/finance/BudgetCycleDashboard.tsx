@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { Calendar, CheckCircle, AlertCircle, Clock, FileText, ArrowRight } from 'lucide-react';
+import { Calendar, CheckCircle, AlertCircle, Clock, FileText, ArrowRight, Activity } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../components/ThemeProvider';
 
@@ -37,6 +37,35 @@ export default function BudgetCycleDashboard() {
             Active Cycle: Hearings
           </span>
         </div>
+      </div>
+
+      {/* Formulation Hub Links */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { title: "Macro Ceiling Config", desc: "Define multi-year fiscal envelopes and sector targets.", route: "/app/finance/budget/ceilings", icon: FileText, color: "brand-gold" },
+          { title: "Agency Submission", desc: "Line-item entry grid for MTEF budgeting.", route: "/app/finance/budget/submission", icon: Activity, color: "blue-500" },
+          { title: "Hearings Workspace", desc: "Comparative review of requested vs recommended amounts.", route: "/app/finance/budget/hearings", icon: CheckCircle, color: "emerald-500" }
+        ].map((module, idx) => (
+          <motion.div 
+            key={idx}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+            className="glass-panel p-6 flex flex-col justify-between group hover:border-brand-gold/50 cursor-pointer transition-colors"
+            onClick={() => window.location.href = module.route}
+          >
+            <div>
+              <div className={`p-3 bg-foreground/5 rounded-xl w-fit mb-4 group-hover:bg-${module.color}/10 transition-colors`}>
+                <module.icon className={`w-6 h-6 text-muted group-hover:text-${module.color} transition-colors`} />
+              </div>
+              <h3 className="text-lg font-medium text-foreground mb-1">{module.title}</h3>
+              <p className="text-sm text-muted">{module.desc}</p>
+            </div>
+            <div className="mt-6 flex items-center gap-2 text-sm font-medium text-brand-gold group-hover:text-brand-gold-dark transition-colors">
+              Access Workspace <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Top KPIs */}

@@ -14,7 +14,7 @@ export default function Contact() {
               <Landmark className="text-brand-gold w-5 h-5" />
             </div>
             <span className="text-xl font-serif font-semibold tracking-wide text-foreground">
-              LIFEDge<span className="text-brand-gold">One</span>
+              TRA<span className="text-brand-gold">CE</span>
             </span>
           </Link>
           <Link to="/" className="flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground transition-colors">
@@ -34,7 +34,7 @@ export default function Contact() {
               Get in Touch
             </h1>
             <p className="text-lg text-muted font-light leading-relaxed mb-10">
-              For technical support, access requests, or general inquiries regarding the LIFEDge One platform, please contact the system administration team.
+              For technical support, access requests, or general inquiries regarding the TRACE platform, please contact the system administration team.
             </p>
 
             <div className="space-y-8">
@@ -58,7 +58,7 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-medium text-foreground mb-1">Email Support</h3>
                   <p className="text-muted leading-relaxed">
-                    support@lifedge.mfdp.gov.lr<br />
+                    support@trace.mfdp.gov.lr<br />
                     info@mfdp.gov.lr
                   </p>
                 </div>

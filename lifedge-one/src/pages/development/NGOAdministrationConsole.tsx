@@ -1,153 +1,161 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { Building2, CheckCircle, AlertTriangle, Clock, Search, Filter, ArrowRight, FileText, User } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../../components/ThemeProvider';
+import { AgGridReact } from 'ag-grid-react';
+import { ColDef, ModuleRegistry, ClientSideRowModelModule } from 'ag-grid-community';
+import { HeartHandshake, FileCheck, AlertTriangle, ArrowRight, ShieldCheck, Link as LinkIcon, Download } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
-const mockApplications = [
-  { id: 'NGO-2026-045', name: 'Global Health Initiative', status: 'Pending Review', type: 'International', date: 'Oct 24, 2026' },
-  { id: 'NGO-2026-046', name: 'Liberia Education Trust', status: 'Missing Docs', type: 'National', date: 'Oct 23, 2026' },
-  { id: 'NGO-2026-047', name: 'AgriGrow Foundation', status: 'Approved', type: 'National', date: 'Oct 20, 2026' },
-  { id: 'NGO-2026-048', name: 'Water for All', status: 'Pending Review', type: 'International', date: 'Oct 19, 2026' },
-];
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
+
+interface NGORecord {
+  id: string;
+  name: string;
+  sector: string;
+  accreditationStatus: string;
+  expirationDate: string;
+  totalFunding: number;
+}
 
 export default function NGOAdministrationConsole() {
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
-  const [activeTab, setActiveTab] = useState('applications');
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  const [rowData] = useState<NGORecord[]>([
+    { id: 'NGO-2026-001', name: 'Global Health Partners', sector: 'Healthcare', accreditationStatus: 'Active', expirationDate: '2027-12-31', totalFunding: 15500000 },
+    { id: 'NGO-2026-002', name: 'Education for All Foundation', sector: 'Education', accreditationStatus: 'Expired', expirationDate: '2025-06-30', totalFunding: 2100000 },
+    { id: 'NGO-2026-003', name: 'AgriTech Liberia', sector: 'Agriculture', accreditationStatus: 'Pending Renewal', expirationDate: '2026-11-15', totalFunding: 850000 },
+    { id: 'NGO-2026-004', name: 'Clean Water Initiative', sector: 'WASH', accreditationStatus: 'Active', expirationDate: '2028-01-01', totalFunding: 4200000 },
+    { id: 'NGO-2026-005', name: 'Women in Tech Africa', sector: 'ICT & Gender', accreditationStatus: 'Active', expirationDate: '2029-05-20', totalFunding: 1100000 },
+  ]);
+
+  const currencyFormatter = (params: any) => {
+    if (!params.value && params.value !== 0) return '';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(params.value);
+  };
+
+  const statusCellRenderer = (params: any) => {
+    const status = params.value;
+    return (
+      <span className={cn(
+        "px-2 py-1 rounded-md text-[10px] uppercase tracking-wider font-bold inline-block leading-none mt-2",
+        status === 'Active' ? "bg-brand-green/20 text-brand-green cursor-default" :
+        status === 'Expired' ? "bg-red-500/20 text-red-500 cursor-default" :
+        "bg-orange-500/20 text-orange-500 cursor-default"
+      )}>
+         {status}
+      </span>
+    );
+  };
+
+  const [colDefs] = useState<ColDef<NGORecord>[]>([
+    { field: 'id', headerName: 'Registration ID', width: 150, pinned: 'left', cellClass: 'font-mono text-xs' },
+    { field: 'name', headerName: 'CSO / NGO Name', width: 250 },
+    { field: 'sector', headerName: 'Primary Sector', width: 160 },
+    { field: 'accreditationStatus', headerName: 'Status', width: 150, cellRenderer: statusCellRenderer },
+    { field: 'expirationDate', headerName: 'Valid Until', width: 140 },
+    { field: 'totalFunding', headerName: 'Reported Capital Inflow', width: 220, valueFormatter: currencyFormatter, type: 'numericColumn', cellClass: 'font-bold text-brand-gold' },
+  ]);
+
+  const defaultColDef = useMemo(() => ({
+    sortable: true,
+    filter: true,
+    resizable: true,
+    cellStyle: { fontSize: '13px', display: 'flex', alignItems: 'center' }
+  }), []);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
+          <div className="flex items-center gap-2 mb-2">
+            <HeartHandshake className="w-4 h-4 text-orange-500" />
+            <span className="text-xs font-medium text-orange-500 uppercase tracking-wider">Module 14 / CSO Oversight</span>
+          </div>
           <h1 className="text-2xl font-serif font-medium text-foreground">NGO Administration Console</h1>
-          <p className="text-sm text-muted mt-1">Manage NGO registrations, accreditations, and compliance</p>
+          <p className="text-sm text-muted mt-1">Accreditation tracking, sector alignment, and non-profit funding visibility</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-            <input 
-              type="text" 
-              placeholder="Search NGOs..." 
-              className="pl-9 pr-4 py-2 bg-foreground/5 border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-brand-gold transition-colors w-64"
-            />
-          </div>
-          <button className="p-2 bg-foreground/5 border border-border rounded-lg text-muted hover:text-foreground transition-colors">
-            <Filter className="w-4 h-4" />
-          </button>
+          <Link 
+            to="/app/development/ngo/new"
+            className="px-4 py-2 bg-brand-gold text-brand-dark rounded-lg text-sm font-bold hover:bg-brand-gold-dark flex items-center gap-2 transition-colors shadow-[0_4px_15px_rgba(212,175,55,0.3)]"
+          >
+            <FileCheck className="w-4 h-4" /> Issue Certificate
+          </Link>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-6 border-b border-border">
+      {/* Top KPIs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { id: 'applications', label: 'Applications' },
-          { id: 'users', label: 'Users' },
-          { id: 'documents', label: 'Document Types' },
-          { id: 'statuses', label: 'Accreditation Statuses' },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "pb-3 text-sm font-medium transition-colors relative",
-              activeTab === tab.id ? "text-brand-gold" : "text-muted hover:text-foreground"
-            )}
+          { label: 'Accredited NGOs', value: '142', target: 'Across 12 Sectors', icon: ShieldCheck, color: 'text-brand-green', bg: 'bg-brand-green/10' },
+          { label: 'Expired Licenses', value: '18', target: 'Requires Review', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-500/10' },
+          { label: 'Pending Renewals', value: '24', target: 'Under Review', icon: FileCheck, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+          { label: 'Total CSO Capital', value: '$254.1M', target: 'Off-Budget Funding', icon: HeartHandshake, color: 'text-brand-gold', bg: 'bg-brand-gold/10' },
+        ].map((kpi, idx) => (
+          <motion.div 
+            key={idx}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+            className="glass-panel p-5 relative overflow-hidden group"
           >
-            {tab.label}
-            {activeTab === tab.id && (
-              <motion.div 
-                layoutId="activeTab" 
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold" 
-              />
-            )}
-          </button>
+            <div className="flex justify-between items-start mb-4">
+              <div className={cn("p-2 rounded-lg", kpi.bg)}>
+                <kpi.icon className={cn("w-5 h-5", kpi.color)} />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-3xl font-light text-foreground mb-1">{kpi.value}</h3>
+              <p className="text-sm font-medium text-muted">{kpi.label}</p>
+              <p className="text-xs font-medium text-muted mt-2">{kpi.target}</p>
+            </div>
+            <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-gradient-to-br from-foreground/5 to-transparent rounded-full blur-2xl group-hover:bg-orange-500/10 transition-colors duration-500"></div>
+          </motion.div>
         ))}
       </div>
 
-      {/* Tab Content */}
-      <div className="mt-6">
-        {activeTab === 'applications' && (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
-          >
-            {/* Top KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                { label: 'Total Accredited', value: '142', icon: CheckCircle, color: 'text-brand-green', bg: 'bg-brand-green/10' },
-                { label: 'Pending Review', value: '24', icon: Clock, color: 'text-orange-500', bg: 'bg-orange-500/10' },
-                { label: 'Missing Documents', value: '8', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-500/10' },
-                { label: 'Expiring Soon', value: '15', icon: Clock, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-              ].map((kpi, idx) => (
-                <div key={idx} className="glass-panel p-4 flex items-center gap-4">
-                  <div className={cn("p-3 rounded-lg", kpi.bg)}>
-                    <kpi.icon className={cn("w-6 h-6", kpi.color)} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground">{kpi.value}</h3>
-                    <p className="text-xs font-medium text-muted uppercase tracking-wider">{kpi.label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Applications Table */}
-            <div className="glass-panel overflow-hidden">
-              <div className="p-4 border-b border-border bg-foreground/5 flex justify-between items-center">
-                <h3 className="font-medium text-sm text-foreground">Recent Applications</h3>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="text-xs text-muted uppercase bg-foreground/5 border-b border-border">
-                    <tr>
-                      <th className="px-4 py-3 font-medium">Application ID</th>
-                      <th className="px-4 py-3 font-medium">Organization Name</th>
-                      <th className="px-4 py-3 font-medium">Type</th>
-                      <th className="px-4 py-3 font-medium">Submission Date</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
-                      <th className="px-4 py-3 font-medium text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/50">
-                    {mockApplications.map((app, idx) => (
-                      <tr key={idx} className="hover:bg-foreground/5 transition-colors cursor-pointer">
-                        <td className="px-4 py-3 font-mono text-xs text-foreground">{app.id}</td>
-                        <td className="px-4 py-3 font-medium text-foreground">{app.name}</td>
-                        <td className="px-4 py-3 text-muted">{app.type}</td>
-                        <td className="px-4 py-3 text-muted">{app.date}</td>
-                        <td className="px-4 py-3">
-                          <span className={cn(
-                            "px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider rounded-md inline-block",
-                            app.status === 'Approved' ? "bg-brand-green/20 text-brand-green" :
-                            app.status === 'Missing Docs' ? "bg-red-500/20 text-red-500" :
-                            "bg-orange-500/20 text-orange-500"
-                          )}>
-                            {app.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <button className="text-brand-gold hover:text-brand-gold-dark font-medium text-xs transition-colors">
-                            Review
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Placeholder for other tabs */}
-        {activeTab !== 'applications' && (
-          <div className="glass-panel p-12 text-center">
-            <p className="text-muted">Content for {activeTab} will be displayed here.</p>
-          </div>
-        )}
-      </div>
+      {/* Grid Area */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="glass-panel flex flex-col min-h-[500px]"
+      >
+        <div className="p-5 border-b border-border flex justify-between items-center">
+          <h3 className="text-lg font-medium text-foreground font-serif">Registered Civil Society Registry</h3>
+          <button className="text-xs font-medium text-brand-gold hover:text-brand-gold-dark transition-colors flex items-center gap-1">
+             <Download className="w-4 h-4"/> Extract to Excel
+          </button>
+        </div>
+        <div 
+          className={cn(
+            "flex-1 w-full",
+            isDark ? "ag-theme-quartz-dark" : "ag-theme-quartz"
+          )}
+          style={{ 
+            '--ag-background-color': 'transparent', 
+            '--ag-header-background-color': 'rgba(255,255,255,0.02)',
+            '--ag-border-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+            '--ag-row-border-color': isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            '--ag-odd-row-background-color': 'transparent',
+            '--ag-header-foreground-color': isDark ? '#a1a1aa' : '#71717a',
+            '--ag-font-family': 'Inter, system-ui, sans-serif'
+          } as React.CSSProperties}
+        >
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={colDefs}
+            defaultColDef={defaultColDef}
+            animateRows={true}
+            domLayout="autoHeight"
+          />
+        </div>
+      </motion.div>
     </div>
   );
 }
