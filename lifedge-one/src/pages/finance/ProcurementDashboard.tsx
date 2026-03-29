@@ -68,41 +68,52 @@ export default function ProcurementDashboard() {
           
            <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-muted uppercase bg-foreground/5 border-b border-border">
+              <thead className="text-[10px] text-muted uppercase tracking-widest bg-foreground/[0.02] border-b border-border">
                 <tr>
-                  <th className="px-4 py-3 font-medium">IFB Number</th>
-                  <th className="px-4 py-3 font-medium">Entity</th>
-                  <th className="px-4 py-3 font-medium">Est. Value</th>
-                  <th className="px-4 py-3 font-medium">Phase</th>
-                  <th className="px-4 py-3 font-medium">Payment Link</th>
+                  <th className="px-5 py-4 font-bold">IFB Reference</th>
+                  <th className="px-5 py-4 font-bold">Procuring Entity</th>
+                  <th className="px-5 py-4 font-bold text-right">Current Value</th>
+                  <th className="px-5 py-4 font-bold text-center">PPCC Status</th>
+                  <th className="px-5 py-4 font-bold">Action/Link</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
                 {[
-                  { ifb: 'IFB/MOH/NCB/001', entity: 'Ministry of Health', val: 450000, phase: 'Bidding', status: 'N/A' },
-                  { ifb: 'IFB/MPW/ICB/004', entity: 'Ministry of Public Works', val: 2500000, phase: 'Awarded', status: 'PV Issued' },
-                  { ifb: 'IFB/MOE/NCB/012', entity: 'Ministry of Education', val: 1200000, phase: 'Evaluation', status: 'Pending' },
-                  { ifb: 'IFB/MOF/NCB/002', entity: 'Ministry of Finance', val: 180000, phase: 'Awarded', status: 'Disbursed' },
+                  { ifb: 'IFB/MOH/NCB/001', entity: 'Ministry of Health', val: 450000, phase: 'Bidding', status: 'Approved', class: 'Statutory (> 10k)' },
+                  { ifb: 'IFB/MPW/ICB/004', entity: 'Ministry of Public Works', val: 2500000, phase: 'Awarded', status: 'Cleared', class: 'Statutory (> 10k)' },
+                  { ifb: 'IFB/MOE/NCB/012', entity: 'Ministry of Education', val: 8500, phase: 'Evaluation', status: 'Direct', class: 'Direct (< 10k)' },
+                  { ifb: 'IFB/MOF/NCB/002', entity: 'Ministry of Finance', val: 180000, phase: 'Awarded', status: 'Cleared', class: 'Statutory (> 10k)' },
                 ].map((row, idx) => (
-                  <tr key={idx} className="hover:bg-foreground/5 transition-colors cursor-pointer group">
-                    <td className="px-4 py-3 font-mono text-xs text-foreground font-medium group-hover:text-blue-500 transition-colors">{row.ifb}</td>
-                    <td className="px-4 py-3 text-foreground">{row.entity}</td>
-                    <td className="px-4 py-3 text-brand-gold font-medium font-mono">${row.val.toLocaleString()}</td>
-                    <td className="px-4 py-3">
+                  <tr key={idx} className="hover:bg-foreground/[0.02] transition-colors cursor-pointer group">
+                    <td className="px-5 py-5">
+                      <p className="font-mono text-[11px] text-foreground font-bold group-hover:text-blue-500 transition-colors">{row.ifb}</p>
+                      <p className="text-[9px] text-muted mt-0.5 uppercase tracking-tighter">{row.class}</p>
+                    </td>
+                    <td className="px-5 py-5 text-sm text-foreground font-serif">{row.entity}</td>
+                    <td className="px-5 py-5 text-right font-mono font-bold text-brand-gold">${row.val.toLocaleString()}</td>
+                    <td className="px-5 py-5 text-center">
                        <span className={cn(
-                        "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
-                        row.phase === 'Awarded' ? "bg-brand-green/10 text-brand-green border border-brand-green/20" : "bg-blue-500/10 text-blue-500 border border-blue-500/20"
+                        "px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border",
+                        row.status === 'Cleared' ? "bg-brand-green/10 text-brand-green border-brand-green/20" : 
+                        row.status === 'Approved' ? "bg-blue-500/10 text-blue-500 border-blue-500/20" :
+                        "bg-foreground/5 text-muted border-border"
                        )}>
-                        {row.phase}
+                        {row.status}
                        </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-5 py-5">
                       {row.phase === 'Awarded' ? (
-                        <Link to="/app/finance/execution/vouchers" className="text-blue-500 hover:text-blue-400 flex items-center gap-1 text-xs">
-                          {row.status} <LinkIcon className="w-3 h-3" />
+                        <Link to="/app/finance/execution/vouchers" className="bg-foreground/5 hover:bg-foreground/10 px-3 py-1.5 rounded-lg text-blue-500 transition-all flex items-center justify-center gap-2 text-[10px] font-bold border border-border">
+                          Verify PV <ArrowRight className="w-3 h-3" />
                         </Link>
                       ) : (
-                        <span className="text-muted italic text-[11px]">-</span>
+                        <div className="w-full bg-foreground/[0.02] h-1.5 rounded-full overflow-hidden">
+                           <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: row.phase === 'Evaluation' ? '70%' : '30%' }}
+                            className="h-full bg-blue-500/30"
+                           />
+                        </div>
                       )}
                     </td>
                   </tr>

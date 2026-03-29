@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '../../../components/ThemeProvider';
-import { FileText, CheckCircle, Package, Link as LinkIcon, FileCheck, ShieldAlert, ArrowRight, Stamp, Send } from 'lucide-react';
+import { FileText, CheckCircle, Package, Link as LinkIcon, FileCheck, ShieldAlert, ArrowRight, Stamp, Send, ShieldCheck } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ export default function VoucherProcessing() {
   const [matchStatus, setMatchStatus] = useState<'pending' | 'matched' | 'discrepancy'>('pending');
   const [isVoucherGenerated, setIsVoucherGenerated] = useState(false);
 
-  const runThreeWayMatch = () => {
+  const runStatutoryMatch = () => {
     setMatchStatus('matched');
   };
 
@@ -30,27 +30,27 @@ export default function VoucherProcessing() {
         >
           <Stamp className="w-10 h-10 text-brand-gold" />
         </motion.div>
-        <h2 className="text-3xl font-serif font-medium text-foreground tracking-tight">Payment Voucher Generated</h2>
+        <h2 className="text-3xl font-serif font-medium text-foreground tracking-tight">Statutory Voucher Created</h2>
         <p className="text-muted leading-relaxed">
-          PV #2026-F4-0012 has been legally generated and queued for final Comptroller approval in the Treasury disbursement system.
+          PV #2026-F4-0012 has been legally cleared by PPCC validation and is transmitted to the MFDP EFT queue for final remittance.
         </p>
         <div className="glass-panel p-6 w-full text-left space-y-4 border border-brand-gold/30 bg-brand-gold/5">
           <div className="flex justify-between items-center pb-2 border-b border-brand-gold/20">
-            <span className="text-sm text-muted">Beneficiary Entity</span>
+            <span className="text-sm text-muted uppercase tracking-widest text-[10px] font-bold">Beneficiary Entity</span>
             <span className="text-sm font-bold text-foreground">Liberia Tech Ltd.</span>
           </div>
           <div className="flex justify-between items-center pb-2 border-b border-brand-gold/20">
-            <span className="text-sm text-muted">IFMIS Voucher ID</span>
-            <span className="text-sm font-mono font-bold text-brand-gold">PV-092-2026-X</span>
+            <span className="text-sm text-muted uppercase tracking-widest text-[10px] font-bold">PPCC Clearance ID</span>
+            <span className="text-sm font-mono font-bold text-blue-500">PPCC-AUTH-2026-X99</span>
           </div>
           <div className="flex justify-between items-center pb-2 border-b border-brand-gold/20">
-            <span className="text-sm text-muted">Total Remittance</span>
+            <span className="text-sm text-muted uppercase tracking-widest text-[10px] font-bold">Disbursement Amount</span>
             <span className="text-sm font-bold text-foreground font-mono">$35,000.00</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-muted">Treasury Status</span>
-            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded">
-              <Send className="w-3 h-3" /> Transmitted to EFT Core
+            <span className="text-sm text-muted uppercase tracking-widest text-[10px] font-bold">Treasury Status</span>
+            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest bg-brand-green/20 text-brand-green px-2.5 py-1 rounded">
+              <CheckCircle className="w-3 h-3" /> Ready for EFT Release
             </span>
           </div>
         </div>
@@ -62,7 +62,7 @@ export default function VoucherProcessing() {
             }}
             className="px-6 py-2.5 bg-foreground/5 border border-border text-foreground hover:bg-foreground/10 rounded-xl transition-all font-medium text-sm"
           >
-            Process Next Invoice
+            Process Next Ledger
           </button>
           <Link 
             to="/app/finance/procurement"
@@ -76,44 +76,47 @@ export default function VoucherProcessing() {
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-12 max-w-[1500px] mx-auto min-h-screen">
+    <div className="flex flex-col gap-6 pb-12 max-w-[1500px] mx-auto min-h-screen pt-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <LinkIcon className="w-4 h-4 text-muted" />
-            <span className="text-xs font-medium text-muted uppercase tracking-wider">Module 8 / Accountability</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Statutory Verification / Module 08</span>
           </div>
-          <h1 className="text-2xl lg:text-3xl font-serif font-medium text-foreground tracking-tight mb-1">
-            Voucher Processing & 3-Way Match
+          <h1 className="text-3xl lg:text-4xl font-serif font-medium text-foreground tracking-tight mb-2">
+             Statutory 4-Way Match
           </h1>
-          <p className="text-sm text-muted">
-            Verify automated linkage between Purchase Order, Delivery Note, and Vendor Invoice before routing to Treasury.
+          <p className="text-sm text-muted max-w-xl font-serif italic text-muted/70 leading-relaxed">
+            "Automated verification of Linkage between Budget Allotment, PPCC Documentation, Physical Goods Received, and Vendor Invoicing."
           </p>
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-6 mt-4">
         
         {/* Left Side: Invoice Queue Context */}
         <div className="w-full lg:w-72 flex flex-col gap-4 shrink-0">
-          <div className="glass-panel p-4 flex flex-col h-[500px]">
-            <h3 className="text-sm font-medium text-foreground uppercase tracking-wider flex items-center gap-2 mb-4">
-               Pending Invoices
+          <div className="glass-panel p-4 flex flex-col h-[600px]">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground mb-4 flex items-center gap-2">
+               Pending Obligations
             </h3>
             <div className="overflow-y-auto pr-2 space-y-2">
               {[
-                { id: 'INV-LiberiaTech-092', amount: 35000, date: 'Oct 25', status: 'ready' },
-                { id: 'INV-AlphaConstruct', amount: 150000, date: 'Oct 24', status: 'discrepancy' },
-                { id: 'INV-OfficeSupplies', amount: 4500, date: 'Oct 23', status: 'ready' }
+                { id: 'INV-LiberiaTech-092', amount: 35000, date: 'Oct 25', status: 'ready', entity: 'MPW' },
+                { id: 'INV-AlphaConstruct', amount: 150000, date: 'Oct 24', status: 'discrepancy', entity: 'MOH' },
+                { id: 'INV-OfficeSupplies', amount: 4500, date: 'Oct 23', status: 'ready', entity: 'MOE' }
               ].map((inv, idx) => (
                 <div key={idx} className={cn(
-                  "p-3 rounded-lg border cursor-pointer transition-colors",
-                  idx === 0 ? "bg-brand-gold/10 border-brand-gold/30" : "bg-foreground/[0.02] border-border hover:bg-foreground/5"
+                  "p-3 rounded-xl border cursor-pointer transition-all",
+                  idx === 0 ? "bg-brand-gold/10 border-brand-gold/30 shadow-lg shadow-brand-gold/5" : "bg-foreground/[0.02] border-border hover:bg-foreground/5"
                 )}>
-                  <p className={cn("text-xs font-mono mb-1", idx === 0 ? "text-brand-gold font-bold" : "text-foreground font-medium")}>{inv.id}</p>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-sm font-medium text-foreground font-mono">${inv.amount.toLocaleString()}</span>
+                  <div className="flex justify-between items-start mb-2">
+                    <p className={cn("text-[10px] font-mono", idx === 0 ? "text-brand-gold font-bold" : "text-muted")}>{inv.id}</p>
+                    <span className="text-[9px] font-black bg-foreground/5 px-1.5 py-0.5 rounded">{inv.entity}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-mono font-bold text-foreground">${inv.amount.toLocaleString()}</span>
                     {inv.status === 'ready' ? 
                       <CheckCircle className="w-3 h-3 text-brand-green" /> : 
                       <ShieldAlert className="w-3 h-3 text-red-500" />
@@ -131,99 +134,110 @@ export default function VoucherProcessing() {
           {/* Header Action Bar */}
            <div className="glass-panel p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-xl font-medium text-foreground font-mono">INV-LiberiaTech-092</h2>
-                <p className="text-sm text-muted">Ministry of Finance • Economic Code: 221401</p>
+                <h2 className="text-xl font-medium text-foreground tracking-tight font-mono">INV-LT-092 / COMMIT-26</h2>
+                <p className="text-xs text-muted uppercase tracking-widest mt-1 font-bold">Economic Code: 221401 • Ministry of Public Works</p>
               </div>
               <div className="flex gap-2">
                  <button 
-                  onClick={runThreeWayMatch}
+                  onClick={runStatutoryMatch}
                   disabled={matchStatus === 'matched'}
-                  className={cn("px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all", matchStatus === 'matched' ? "bg-foreground/10 text-muted" : "bg-blue-500 hover:bg-blue-600 text-white shadow-lg")}
+                  className={cn("px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-3 transition-all", matchStatus === 'matched' ? "bg-foreground/10 text-muted border border-border" : "bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-500/20 active:translate-y-px")}
                  >
-                   <FileCheck className="w-4 h-4" /> Run Automated 3-Way Match
+                   <ShieldCheck className="w-4 h-4" /> Run Statutory 4-Way Match
                  </button>
               </div>
            </div>
 
            {/* Matching Panes */}
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* PO Data */}
               <motion.div 
-                className={cn("glass-panel p-5 border-t-2", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted')}
-                animate={matchStatus === 'matched' ? { scale: [1, 1.02, 1] } : {}}
+                className={cn("glass-panel p-5 border-t-4", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted/30')}
+                animate={matchStatus === 'matched' ? { y: [0, -5, 0] } : {}}
               >
                  <div className="flex justify-between mb-4">
-                    <h3 className="text-xs font-medium text-muted uppercase tracking-wider flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-blue-500" /> System PO
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-muted flex items-center gap-2">
+                       Budget PO
                     </h3>
-                    <span className="text-xs font-mono text-foreground font-bold">PO-26-0034</span>
+                    <FileText className="w-4 h-4 text-blue-500" />
                  </div>
-                 <div className="space-y-3">
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Vendor</span>
-                     <span className="text-sm font-medium text-foreground font-serif">Liberia Tech</span>
+                 <div className="space-y-4">
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Reference</span>
+                     <span className="text-xs font-mono font-bold text-foreground">PO-26-0034</span>
                    </div>
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Total Auth</span>
-                     <span className="text-sm font-medium text-foreground font-mono">$35,000.00</span>
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Authorized Value</span>
+                     <span className="text-xs font-mono font-bold text-foreground">$35,000.00</span>
                    </div>
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Items Expected</span>
-                     <span className="text-sm font-medium text-foreground">22 Units</span>
+                 </div>
+              </motion.div>
+
+              {/* PPCC Data (Statutory) */}
+               <motion.div 
+                className={cn("glass-panel p-5 border-t-4", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted/30')}
+                animate={matchStatus === 'matched' ? { y: [0, -5, 0], transition: { delay: 0.1 } } : {}}
+              >
+                 <div className="flex justify-between mb-4">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-muted flex items-center gap-2">
+                       PPCC Clearance
+                    </h3>
+                    <ShieldCheck className="w-4 h-4 text-brand-gold" />
+                 </div>
+                 <div className="space-y-4">
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Clearance ID</span>
+                     <span className="text-xs font-mono font-bold text-foreground">PPCC-AUTH-26-X</span>
+                   </div>
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Oversight</span>
+                     <span className="text-[10px] font-bold text-brand-green uppercase">Verified Statutory</span>
                    </div>
                  </div>
               </motion.div>
 
               {/* Delivery Data */}
               <motion.div 
-                className={cn("glass-panel p-5 border-t-2", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted')}
-                animate={matchStatus === 'matched' ? { scale: [1, 1.02, 1], transition: { delay: 0.1 } } : {}}
+                className={cn("glass-panel p-5 border-t-4", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted/30')}
+                animate={matchStatus === 'matched' ? { y: [0, -5, 0], transition: { delay: 0.2 } } : {}}
               >
                  <div className="flex justify-between mb-4">
-                    <h3 className="text-xs font-medium text-muted uppercase tracking-wider flex items-center gap-2">
-                      <Package className="w-4 h-4 text-orange-500" /> Receiving Report
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-muted flex items-center gap-2">
+                       Delivery Note
                     </h3>
-                    <span className="text-xs font-mono text-foreground font-bold">GRN-0902</span>
+                    <Package className="w-4 h-4 text-orange-500" />
                  </div>
-                 <div className="space-y-3">
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Signed By</span>
-                     <span className="text-sm font-medium text-foreground font-serif">Warehouse Mgr</span>
+                 <div className="space-y-4">
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Signed Receipt</span>
+                     <span className="text-xs font-mono font-bold text-foreground">GRN-0902</span>
                    </div>
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Condition</span>
-                     <span className="text-sm font-black text-brand-green uppercase text-[10px]">Accepted</span>
-                   </div>
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Items Received</span>
-                     <span className="text-sm font-medium text-foreground">22 Units</span>
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Asset Status</span>
+                     <span className="text-[10px] font-black text-brand-green uppercase tracking-widest bg-brand-green/10 px-1.5 py-0.5 rounded w-fit">Accepted</span>
                    </div>
                  </div>
               </motion.div>
 
                {/* Invoice Data */}
               <motion.div 
-                className={cn("glass-panel p-5 border-t-2", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted')}
-                animate={matchStatus === 'matched' ? { scale: [1, 1.02, 1], transition: { delay: 0.2 } } : {}}
+                className={cn("glass-panel p-5 border-t-4", matchStatus === 'matched' ? 'border-t-brand-green' : 'border-t-muted/30')}
+                animate={matchStatus === 'matched' ? { y: [0, -5, 0], transition: { delay: 0.3 } } : {}}
               >
                  <div className="flex justify-between mb-4">
-                    <h3 className="text-xs font-medium text-muted uppercase tracking-wider flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-brand-gold" /> Vendor Invoice
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-muted flex items-center gap-2">
+                       Vendor Invoice
                     </h3>
-                    <span className="text-xs font-mono text-foreground font-bold">INV-092</span>
+                    <FileText className="w-4 h-4 text-brand-gold" />
                  </div>
-                 <div className="space-y-3">
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Remit To</span>
-                     <span className="text-sm font-medium text-foreground font-serif">Liberia Tech Ltd.</span>
+                 <div className="space-y-4">
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Invoice Ref</span>
+                     <span className="text-xs font-mono font-bold text-foreground">INV-092-LT</span>
                    </div>
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Amount Billed</span>
-                     <span className="text-sm font-medium text-foreground font-mono">$35,000.00</span>
-                   </div>
-                   <div className="flex justify-between">
-                     <span className="text-sm text-muted font-serif">Items Billed</span>
-                     <span className="text-sm font-medium text-foreground">22 Units</span>
+                   <div className="flex flex-col">
+                     <span className="text-[10px] text-muted uppercase font-bold">Billed Amount</span>
+                     <span className="text-xs font-mono font-bold text-foreground">$35,000.00</span>
                    </div>
                  </div>
               </motion.div>
@@ -233,28 +247,28 @@ export default function VoucherProcessing() {
            <AnimatePresence>
              {matchStatus === 'matched' && (
                <motion.div
-                 initial={{ opacity: 0, height: 0 }}
-                 animate={{ opacity: 1, height: 'auto' }}
+                 initial={{ opacity: 0, scale: 0.98 }}
+                 animate={{ opacity: 1, scale: 1 }}
                  className="overflow-hidden"
                >
-                 <div className="glass-panel p-8 border-l-4 border-l-brand-green bg-brand-green/5 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-brand-green rounded-full text-white shrink-0">
+                 <div className="glass-panel p-8 border-l-4 border-l-brand-green bg-brand-green/[0.03] flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex items-start gap-5">
+                      <div className="p-4 bg-brand-green rounded-2xl text-white shrink-0 shadow-lg shadow-brand-green/20">
                         <CheckCircle className="w-8 h-8" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-medium text-brand-green font-serif mb-1">P2P Compliance Verified</h3>
-                        <p className="text-sm text-muted max-w-lg leading-relaxed">
-                          Validation successful. System PO, Physical Receiving Report, and Vendor Invoice are entirely aligned. Procurement-to-Payment audit trail is complete.
+                        <h3 className="text-xl font-medium text-brand-green font-serif mb-2 tracking-tight">Statutory 4-Way Match Confirmed</h3>
+                        <p className="text-sm text-muted max-w-xl leading-relaxed font-serif italic">
+                          Validation successful. Per Liberian Procurement Law, the linkage between Budget PO #0034 and PPCC Clearance #AUTH-26-X has been verified as structurally sound for final remittance.
                         </p>
                       </div>
                     </div>
                     
                     <button 
                       onClick={handleGenerateVoucher}
-                      className="px-6 py-4 bg-brand-gold text-brand-dark rounded-xl text-lg font-bold shadow-[0_4px_20px_rgba(212,175,55,0.4)] hover:bg-brand-gold-dark hover:translate-y-[-2px] hover:shadow-[0_4px_25px_rgba(212,175,55,0.5)] transition-all flex items-center gap-3 w-full md:w-auto shrink-0 whitespace-nowrap"
+                      className="px-8 py-5 bg-brand-gold text-brand-dark rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_10px_30px_rgba(212,175,55,0.4)] hover:shadow-[0_15px_40px_rgba(212,175,55,0.5)] hover:scale-[1.02] hover:-translate-y-1 transition-all flex items-center gap-4 w-full md:w-auto shrink-0 whitespace-nowrap active:scale-95"
                     >
-                      <Stamp className="w-5 h-5" /> Generate Payment Voucher
+                      <Stamp className="w-5 h-5" /> Issue Statutory PV
                     </button>
                  </div>
                </motion.div>
@@ -266,4 +280,5 @@ export default function VoucherProcessing() {
     </div>
   );
 }
+
 
