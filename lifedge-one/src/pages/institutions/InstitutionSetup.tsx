@@ -403,7 +403,8 @@ export default function InstitutionSetup() {
               </button>
             ) : (
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit as any}
                 className="flex items-center gap-2 px-8 py-3 bg-brand-gold text-brand-dark rounded-xl text-sm font-black shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] hover:scale-105 transition-all"
               >
                 Commit Schema <Save className="w-4 h-4" />
