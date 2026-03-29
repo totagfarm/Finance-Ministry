@@ -1,29 +1,40 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-slim
+# Stage 1: Build Environment
+FROM node:20 AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy dependency manifests
 COPY package*.json ./
 
-# Install dependencies
+# Install all dependencies including devDependencies for the build
 RUN npm install
 
-# Copy the rest of the application code
+# Copy source code
 COPY . .
 
-# Build the application
-# This runs 'vite build apps/web' as defined in package.json
+# Execute the production build of the Vite application
+# This generates the 'dist' folder inside 'apps/web' as per vite.config.ts
 RUN npm run build
 
-# Expose the port the app runs on
-EXPOSE 8080
+# Stage 2: Production Runtime
+FROM node:20-slim
 
-# Environment variables
+WORKDIR /app
+
+# Copy the built distribution and the server entry point
+# Our server.js expects assets in 'apps/web/dist'
+COPY --from=builder /app/apps/web/dist ./apps/web/dist
+COPY --from=builder /app/server.js ./
+COPY --from=builder /app/package*.json ./
+
+# Install only production dependencies to keep the image slim
+RUN npm install --omit=dev
+
+# Standard Cloud Run environmental configurations
 ENV NODE_ENV=production
 ENV PORT=8080
 
-# The command to run the application
-# This runs 'node server.js' to serve the static dist folder
-CMD ["npm", "start"]
+EXPOSE 8080
+
+# Launch the Express server
+CMD ["node", "server.js"]
