@@ -7,15 +7,19 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 8080;
-const distPath = path.join(__dirname, 'dist');
+let distPath = path.join(__dirname, 'apps/web/dist');
+
+// Fallback to root dist if apps/web/dist is not found
+if (!fs.existsSync(distPath)) {
+  distPath = path.join(__dirname, 'dist');
+}
 
 console.log(`Current __dirname: ${__dirname}`);
 try {
-  const fs = await import('fs');
   if (fs.existsSync(distPath)) {
-    console.log(`dist folder found! Contents: ${fs.readdirSync(distPath)}`);
+    console.log(`dist folder found at ${distPath}! Contents: ${fs.readdirSync(distPath)}`);
   } else {
-    console.error(`dist folder NOT FOUND at ${distPath}`);
+    console.error(`dist folder NOT FOUND at ANY known location`);
     console.log(`Root contents: ${fs.readdirSync(__dirname)}`);
   }
 } catch (e) {
