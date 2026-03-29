@@ -22,8 +22,10 @@ import {
   BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, ScatterChart, Scatter, ZAxis, Brush
 } from 'recharts';
 import { useTheme } from '../components/ThemeProvider';
+import LiberiaInteractiveMap from '../components/LiberiaInteractiveMap';
 import { cn } from '../lib/utils';
-import HeroMagazineSpread from '../components/HeroMagazineSpread';
+// Remove HeroMagazineSpread as we are reverting to direct carousel
+// import HeroMagazineSpread from '../components/HeroMagazineSpread';
 
 const COLORS = ['#D4AF37', '#1E4D2B', '#4ade80', '#facc15', '#60a5fa'];
 
@@ -238,6 +240,15 @@ const ChartCarousel = () => {
           </ScatterChart>
         </ResponsiveContainer>
       )
+    },
+    {
+      id: 'map',
+      title: 'Geographic Tool (Liberia)',
+      component: (
+        <div className="w-full h-full flex flex-col pt-4 overflow-visible min-h-[300px]">
+          <LiberiaInteractiveMap />
+        </div>
+      )
     }
   ];
 
@@ -320,7 +331,7 @@ const ChartCarousel = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="w-full h-full"
+            className="w-full h-full aspect-[4/3] md:aspect-auto"
           >
             {charts[currentIndex].component}
           </motion.div>
@@ -512,14 +523,43 @@ export default function LandingPage() {
             </div>
           </motion.div>
 
-          {/* Right: Magazine Spread Layout */}
+          {/* Right: Carousel Restoration */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="relative w-full h-full min-h-[500px] hidden lg:block"
+            className="relative w-full h-full min-h-[500px]"
           >
-            <HeroMagazineSpread />
+            <ChartCarousel />
+
+            {/* Floating decorative elements fixed to the carousel container */}
+            <motion.div 
+              animate={{ y: [0, -10, 0] }} 
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              className="absolute -top-6 -right-6 glass-panel p-4 flex items-center gap-3 z-20 hidden md:flex"
+            >
+              <div className="w-8 h-8 rounded-full bg-brand-green/20 flex items-center justify-center">
+                <Activity className="w-4 h-4 text-brand-green" />
+              </div>
+              <div>
+                <p className="text-[10px] text-muted uppercase tracking-wider">Live Execution</p>
+                <p className="text-sm font-medium text-foreground">98.4% Sync Rate</p>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              animate={{ y: [0, 10, 0] }} 
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+              className="absolute -bottom-6 -left-6 glass-panel p-4 flex items-center gap-3 z-20 hidden md:flex"
+            >
+              <div className="w-8 h-8 rounded-full bg-brand-gold/20 flex items-center justify-center">
+                <Globe className="w-4 h-4 text-brand-gold" />
+              </div>
+              <div>
+                <p className="text-[10px] text-muted uppercase tracking-wider">Geographic View</p>
+                <p className="text-sm font-medium text-foreground">15 Counties Active</p>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>

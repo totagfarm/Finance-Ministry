@@ -13,9 +13,9 @@ export const ALL_SECTIONS: Record<string, NavSection> = {
     label: 'Dashboard',
     items: [
       { label: 'Executive Overview', path: '/app' },
-      { label: 'My Work Queue', path: '/app/pending?module=My%20Work%20Queue' },
+      { label: 'My Work Queue', path: '/app/dashboard/work-queue' },
       { label: 'Alerts & Exceptions', path: '/app/pending?module=Alerts%20%26%20Exceptions' },
-      { label: 'Calendar & Deadlines', path: '/app/pending?module=Calendar%20%26%20Deadlines' },
+      { label: 'Calendar & Deadlines', path: '/app/finance/calendar' },
       { label: 'Briefing Packs', path: '/app/pending?module=Briefing%20Packs' }
     ]
   },

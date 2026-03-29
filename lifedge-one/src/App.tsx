@@ -54,6 +54,8 @@ import DailyRevenueLog from "./pages/finance/revenue/DailyRevenueLog";
 import MacroDashboard from "./pages/macro/MacroDashboard";
 import DocumentCenter from "./pages/documents/DocumentCenter";
 import WorkflowEngine from "./pages/admin/WorkflowEngine";
+import CalendarAndDeadlines from "./pages/finance/CalendarAndDeadlines";
+import WorkQueue from "./pages/dashboard/WorkQueue";
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -118,6 +120,8 @@ export default function App() {
             <Route path="macro" element={<MacroDashboard />} />
             <Route path="documents" element={<DocumentCenter />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="finance/calendar" element={<CalendarAndDeadlines />} />
+            <Route path="dashboard/work-queue" element={<WorkQueue />} />
             <Route path="pending" element={<ModulePlaceholder />} />
           </Route>
         </Routes>
