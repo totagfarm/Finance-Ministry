@@ -33,7 +33,7 @@ import NGOAccreditationWizard from "./pages/development/ngo/NGOAccreditationWiza
 import ProjectBank from "./pages/development/ProjectBank";
 import NewProjectInduction from "./pages/development/projects/NewProjectInduction";
 import AuditTrackingDashboard from "./pages/oversight/AuditTrackingDashboard";
-import NewAuditFinding from "./pages/oversight/audit/NewAuditFinding";
+import AuditFindingWizard from "./pages/oversight/audit/AuditFindingWizard";
 import ComplianceMonitor from "./pages/oversight/ComplianceMonitor";
 import NewComplianceFlag from "./pages/oversight/compliance/NewComplianceFlag";
 import MACRegistry from "./pages/oversight/MACRegistry";
@@ -99,7 +99,7 @@ export default function App() {
             <Route path="development/projects" element={<ProjectBank />} />
             <Route path="development/projects/new" element={<NewProjectInduction />} />
             <Route path="oversight/audit" element={<AuditTrackingDashboard />} />
-            <Route path="oversight/audit/new" element={<NewAuditFinding />} />
+            <Route path="oversight/audit/new" element={<AuditFindingWizard />} />
             <Route path="oversight/compliance" element={<ComplianceMonitor />} />
             <Route path="oversight/compliance/new" element={<NewComplianceFlag />} />
             <Route path="admin/settings" element={<SystemSettings />} />
