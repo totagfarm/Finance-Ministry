@@ -39,6 +39,10 @@ export default function InstitutionSetup() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (step < 4) {
+      console.warn("Form submitted prematurely on step:", step);
+      return;
+    }
     // Simulate save functionality
     alert("Entity registration successfully committed to the national master data registry.");
     navigate('/app/institutions');
