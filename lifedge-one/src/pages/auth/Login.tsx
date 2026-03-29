@@ -39,19 +39,23 @@ export default function Login() {
       <div className="hidden lg:flex w-1/2 relative overflow-hidden bg-brand-dark">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-green/80 to-brand-dark/90 z-10 mix-blend-multiply" />
         <img 
-          src="https://picsum.photos/seed/monrovia/1080/1920" 
-          alt="Monrovia cityscape" 
+          src="/mfdp-building.png" 
+          alt="MFDP Building" 
           className="absolute inset-0 w-full h-full object-cover"
-          referrerPolicy="no-referrer"
         />
         <div className="relative z-20 flex flex-col justify-between p-12 h-full">
           <Link to="/" className="flex items-center gap-3 w-fit">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-green to-brand-green-dark flex items-center justify-center border border-brand-gold/30 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-              <Landmark className="text-brand-gold w-5 h-5" />
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center border border-brand-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.2)] shrink-0">
+              <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover" />
             </div>
-            <span className="text-xl font-serif font-semibold tracking-wide text-white">
-              TRA<span className="text-brand-gold">CE</span>
-            </span>
+            <div className="flex flex-col justify-center">
+              <span className="text-xl font-serif font-semibold tracking-wide text-white leading-tight">
+                TRA<span className="text-brand-gold">CE</span>
+              </span>
+              <span className="text-[9px] text-white/50 font-medium leading-[1.2] max-w-[150px] mt-0.5">
+                Transparent Resource Allocation, Control & Execution
+              </span>
+            </div>
           </Link>
           
           <div className="max-w-md">
@@ -68,12 +72,17 @@ export default function Login() {
       {/* Right: Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-24 relative overflow-y-auto">
         <Link to="/" className="lg:hidden absolute top-8 left-8 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-green to-brand-green-dark flex items-center justify-center border border-brand-gold/30">
-            <Landmark className="text-brand-gold w-4 h-4" />
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center border border-brand-gold/50 shadow-sm shrink-0">
+            <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="text-lg font-serif font-semibold tracking-wide text-foreground">
-            TRA<span className="text-brand-gold">CE</span>
-          </span>
+          <div className="flex flex-col justify-center">
+            <span className="text-lg font-serif font-semibold tracking-wide text-foreground leading-tight">
+              TRA<span className="text-brand-gold">CE</span>
+            </span>
+            <span className="text-[8px] text-muted font-medium leading-tight">
+              Transparent Resource Allocation, Control & Execution
+            </span>
+          </div>
         </Link>
 
         <motion.div 
