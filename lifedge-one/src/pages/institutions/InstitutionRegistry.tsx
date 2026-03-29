@@ -46,9 +46,12 @@ export default function InstitutionRegistry() {
               className="w-full pl-9 pr-4 py-2 bg-foreground/5 border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-brand-gold transition-colors"
             />
           </div>
-          <button className="px-4 py-2 bg-brand-gold text-brand-dark rounded-lg text-sm font-medium hover:bg-brand-gold/90 transition-colors flex items-center gap-2 whitespace-nowrap">
+          <Link 
+            to="/app/institutions/setup"
+            className="px-4 py-2 bg-brand-gold text-brand-dark rounded-lg text-sm font-medium hover:bg-brand-gold/90 transition-colors flex items-center gap-2 whitespace-nowrap"
+          >
             <Plus className="w-4 h-4" /> Add Entity
-          </button>
+          </Link>
         </div>
       </div>
 
