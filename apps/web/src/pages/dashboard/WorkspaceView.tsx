@@ -98,9 +98,9 @@ export default function WorkspaceView({ currentRole }: { currentRole: string }) 
       ];
       default: return [
         { title: "Total Appropriation", value: "$1.24B", trend: "up", trendValue: "+5.2%", icon: DollarSign, colorClass: "bg-brand-gold" },
-        { title: "Allotments Released", value: "$845M", trend: "up", trendValue: "+12.4%", icon: Activity, colorClass: "bg-brand-green" },
-        { title: "Active Commitments", value: "$320M", trend: "down", trendValue: "-2.1%", icon: Clock, colorClass: "bg-blue-500" },
-        { title: "EFT Payments Settled", value: "$410M", trend: "up", trendValue: "+8.7%", icon: CheckCircle2, colorClass: "bg-emerald-500" },
+        { title: "Total DFP Portfolio", value: "$450M", trend: "up", trendValue: "+12.4%", icon: Globe, colorClass: "bg-brand-green" },
+        { title: "Meridian Sync", value: "82%", trend: "up", trendValue: "Live", icon: Activity, colorClass: "bg-blue-500" },
+        { title: "EFT Queue Value", value: "$12.4M", trend: "down", trendValue: "-5.2%", icon: CheckCircle2, colorClass: "bg-emerald-500" },
       ];
     }
   };
@@ -156,10 +156,10 @@ export default function WorkspaceView({ currentRole }: { currentRole: string }) 
         { title: 'CS-DRMS Integration', desc: 'Scheduled debt portfolio sync completed with 2 minor mapping warnings.', type: 'info', time: '1d ago' },
       ];
       default: return [
-        { title: 'EFT Sync Failure', desc: 'Connection timeout with Central Bank gateway during batch PV-BATCH-092.', type: 'critical', time: '15m ago' },
-        { title: 'Appropriation Overrun Warning', desc: 'Min. of Infrastructure approaching 95% of Q2 capital allocation.', type: 'warning', time: '2h ago' },
-        { title: 'Reconciliation Mismatch', desc: 'Bank statement import #BS-044 shows $12,500 variance vs IFMIS ledger.', type: 'warning', time: '5h ago' },
-        { title: 'CS-DRMS Integration', desc: 'Scheduled debt portfolio sync completed with 2 minor mapping warnings.', type: 'info', time: '1d ago' },
+        { title: 'New Silo Handoff', desc: 'Silo 01 (IFMIS) pushed PV #2026-F4-0012 to Silo 06 (EFT) for disbursement.', type: 'info', time: 'Just now' },
+        { title: 'Meridian Migration', desc: '82% of CS-DRMS data successfully migrated to Commonwealth Meridian database.', type: 'info', time: '15m ago' },
+        { title: 'Appropriation Overrun', desc: 'Min. of Infrastructure approaching 95% of Q2 capital allocation.', type: 'warning', time: '2h ago' },
+        { title: 'DFP Reporting Due', desc: '12 Donor-Funded Projects (Silo 08) require Q3 financial submission.', type: 'warning', time: '5h ago' },
       ];
     }
   };

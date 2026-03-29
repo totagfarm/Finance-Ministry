@@ -96,7 +96,7 @@ export default function GlobalShell() {
               <span className="text-2xl font-serif font-black tracking-[0.2em] text-[#D4AF37] leading-none">
                 TRA<span className="text-white">CE</span>
               </span>
-              <span className="text-[7.5px] text-slate-500 font-bold leading-tight max-w-[160px] mt-1 uppercase tracking-widest border-t border-slate-800/50 pt-0.5">
+              <span className="text-[7.5px] text-slate-500 font-bold leading-tight max-w-[160px] mt-1 normal-case tracking-widest border-t border-slate-800/50 pt-0.5">
                 Transparent Resource Allocation, Control & Execution
               </span>
             </div>
@@ -116,18 +116,25 @@ export default function GlobalShell() {
               <div key={section.label} className="flex flex-col gap-1">
                 <button 
                   onClick={() => setOpenNavExpanded(isExpanded ? '' : section.label)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-muted hover:text-foreground transition-colors group"
+                  className="w-full flex items-center justify-between px-3 py-2 text-slate-300 hover:text-white transition-colors group relative"
                 >
                   <div className="flex items-center gap-3">
-                    <section.icon className={cn("w-5 h-5 transition-colors", isExpanded ? "text-[#D4AF37]" : "text-slate-400 group-hover:text-white")} />
-                    <span className={cn("hidden lg:block font-bold text-[11px] uppercase tracking-widest text-left transition-colors", isExpanded ? "text-white" : "text-slate-500")}>
+                    <section.icon className={cn("w-5 h-5 transition-colors", isExpanded ? "text-[#D4AF37]" : "text-slate-500 group-hover:text-slate-200")} />
+                    <span className={cn("hidden lg:block font-black text-[11px] normal-case tracking-[0.2em] text-left transition-colors", isExpanded ? "text-white" : "text-slate-400 group-hover:text-slate-200")}>
                       {section.label}
                     </span>
                   </div>
                   <ChevronRightIcon className={cn(
                     "w-4 h-4 hidden lg:block transition-transform duration-200",
-                    isExpanded ? "rotate-90" : ""
+                    isExpanded ? "rotate-90 text-[#D4AF37]" : "text-slate-600"
                   )} />
+                  
+                  {isExpanded && (
+                    <motion.div 
+                      layoutId="sidebarActivePill"
+                      className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#D4AF37] rounded-r-full shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+                    />
+                  )}
                 </button>
                 
                 <AnimatePresence>
@@ -147,15 +154,15 @@ export default function GlobalShell() {
                               key={item.label}
                               to={item.path}
                               className={cn(
-                                "py-3 px-4 rounded-lg transition-all duration-300 text-[10px] font-black uppercase tracking-[0.15em] relative block border border-transparent mb-1",
+                                "py-2.5 px-4 rounded-lg transition-all duration-300 text-[10px] font-black normal-case tracking-[0.15em] relative block border border-transparent mb-1",
                                 isItemActive 
-                                  ? "bg-[#D4AF37]/5 text-[#D4AF37] border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)] ring-1 ring-[#D4AF37]/20" 
-                                  : "text-slate-500 hover:bg-white/[0.03] hover:text-white"
+                                  ? "text-[#D4AF37] font-black" 
+                                  : "text-slate-500 hover:text-slate-200"
                               )}
                             >
                               {item.label}
                               {isItemActive && (
-                                <motion.div className="absolute left-[-16px] top-2 bottom-2 w-[3px] bg-[#D4AF37] rounded-r-full shadow-[0_0_12px_rgba(212,175,55,0.8)]" layoutId="activeNavSub" />
+                                <motion.div className="absolute left-[-16px] top-2 bottom-2 w-[2px] bg-[#D4AF37] rounded-r-full shadow-[0_0_10px_rgba(212,175,55,0.5)]" layoutId="activeNavSub" />
                               )}
                             </Link>
                           );
@@ -272,13 +279,11 @@ export default function GlobalShell() {
                     >
                       <div className="px-4 py-4 border-b border-border bg-foreground/5">
                         <p className="text-sm font-semibold text-foreground flex items-center justify-between">
-                          {currentName}
-                          <span className="px-2 py-0.5 bg-brand-gold/20 text-brand-gold text-[10px] font-bold uppercase tracking-wider rounded">
-                            Active
-                          </span>
-                        </p>
-                        <p className="text-xs text-brand-gold font-medium mt-1 leading-snug">
-                          {currentRole}
+                          <div className="flex items-center gap-2">
+                            <div className="px-3 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] font-black normal-case tracking-widest rounded border border-yellow-400/20">
+                              Role Context: <span className="text-white ml-1">{currentRole}</span>
+                            </div>
+                          </div>
                         </p>
                       </div>
                       

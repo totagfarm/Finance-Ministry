@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { 
   DollarSign, Activity, AlertTriangle, ArrowRight, CheckCircle, 
   Clock, TrendingUp, TrendingDown, Building2, Globe, FileText,
-  ShieldCheck, Calculator, Landmark, Layers, Briefcase, ChevronRight
+  ShieldCheck, Calculator, Landmark, Layers, Briefcase, ChevronRight, RefreshCw
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
@@ -104,6 +104,23 @@ export default function DebtPortfolioDashboard() {
                <div className="text-center">
                   <p className="text-[10px] font-black text-muted uppercase tracking-widest">Credit Rating</p>
                   <p className="text-xs font-bold text-foreground mt-1">B (Stable)</p>
+               </div>
+            </div>
+            
+            <div className="w-px h-12 bg-border hidden md:block" />
+
+            {/* Meridian Migration Status (Silo 04) */}
+            <div className="flex items-center gap-4 bg-brand-gold/10 p-4 rounded-2xl border border-brand-gold/30">
+               <div className="p-2 bg-brand-gold rounded-lg text-brand-dark">
+                  <RefreshCw className="w-5 h-5" />
+               </div>
+               <div>
+                  <p className="text-[9px] font-black uppercase text-brand-gold tracking-widest leading-none">Meridian Migration</p>
+                  <p className="text-sm font-bold text-foreground mt-1">CS-DRMS → Meridian</p>
+                  <div className="flex items-center gap-2 mt-1">
+                     <span className="text-[8px] font-bold bg-brand-green/20 text-brand-green px-1.5 py-0.5 rounded uppercase">82% Data Sync</span>
+                     <span className="text-[8px] font-bold text-muted uppercase tracking-widest">Live Transition</span>
+                  </div>
                </div>
             </div>
          </div>

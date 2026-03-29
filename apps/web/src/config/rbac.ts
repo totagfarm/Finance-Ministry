@@ -59,7 +59,7 @@ export const ALL_SECTIONS: Record<string, NavSection> = {
       { label: 'Invoice Queue', path: '/app/pending?module=Invoice%20Queue' },
       { label: 'Spending Authority Check', path: '/app/pending?module=Spending%20Authority' },
       { label: 'Blocked Transactions', path: '/app/pending?module=Blocked%20Transactions' },
-      { label: 'Donor-Funded Finance View', path: '/app/pending?module=Donor-Funded%20Finance' }
+      { label: 'Donor-Funded Projects (DFP)', path: '/app/finance/donor-projects' }
     ]
   },
   treasuryAndPayments: {
@@ -104,7 +104,7 @@ export const ALL_SECTIONS: Record<string, NavSection> = {
       { label: 'Contingent Liabilities', path: '/app/pending?module=Contingent%20Liabilities' },
       { label: 'PPP Exposure', path: '/app/pending?module=PPP%20Exposure' },
       { label: 'Fiscal Risk Dashboard', path: '/app/macro' },
-      { label: 'Debt Reconciliation Bridge', path: '/app/finance/debt' }
+      { label: 'Meridian Migration Bridge', path: '/app/finance/debt' }
     ]
   },
   revenueIntelligence: {
@@ -331,9 +331,11 @@ export type Role = typeof ROLE_CATEGORIES[keyof typeof ROLE_CATEGORIES][number];
 const TEMPLATES = {
   EXECUTIVE: [
     ALL_SECTIONS.dashboard, ALL_SECTIONS.budgetAndAllocation, ALL_SECTIONS.allotments, 
-    ALL_SECTIONS.treasuryAndPayments, ALL_SECTIONS.debtAndFiscalRisk, ALL_SECTIONS.revenueIntelligence, 
-    ALL_SECTIONS.aidAndDevelopment, ALL_SECTIONS.projectsAndAppraisal, ALL_SECTIONS.macOversight, 
-    ALL_SECTIONS.soeOversight, ALL_SECTIONS.reportsAndTransparency, ALL_SECTIONS.documentsAndAudit
+    ALL_SECTIONS.expenditureControl, ALL_SECTIONS.treasuryAndPayments, 
+    ALL_SECTIONS.debtAndFiscalRisk, ALL_SECTIONS.revenueIntelligence, 
+    ALL_SECTIONS.aidAndDevelopment, ALL_SECTIONS.projectsAndAppraisal, 
+    ALL_SECTIONS.macOversight, ALL_SECTIONS.soeOversight, 
+    ALL_SECTIONS.reportsAndTransparency, ALL_SECTIONS.documentsAndAudit
   ],
   BUDGET: [
     ALL_SECTIONS.dashboard, ALL_SECTIONS.budgetAndAllocation, ALL_SECTIONS.allotments,

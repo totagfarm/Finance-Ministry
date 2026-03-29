@@ -42,8 +42,8 @@ export default function VoucherProcessing() {
           <Stamp className="w-10 h-10 text-brand-gold" />
         </motion.div>
         <h2 className="text-3xl font-serif font-medium text-foreground tracking-tight">Statutory Voucher Created</h2>
-        <p className="text-muted leading-relaxed">
-          PV #2026-F4-0012 has been legally cleared by PPCC validation and is transmitted to the MFDP EFT queue for final remittance.
+        <p className="text-sm text-muted leading-relaxed max-w-md mx-auto">
+          PV #2026-F4-0012 has been legally cleared by PPCC validation and is ready for remittance. Transfer this obligation to the EFT Gateway for electronic settlement.
         </p>
         <div className="glass-panel p-6 w-full text-left space-y-4 border border-brand-gold/30 bg-brand-gold/5">
           <div className="flex justify-between items-center pb-2 border-b border-brand-gold/20">
@@ -76,10 +76,10 @@ export default function VoucherProcessing() {
             Process Next Ledger
           </button>
           <Link 
-            to="/app/finance/procurement"
-            className="px-6 py-2.5 bg-brand-gold text-brand-dark hover:bg-brand-gold-dark rounded-xl transition-all font-bold text-sm shadow-[0_4px_20px_rgba(212,175,55,0.3)]"
+            to="/app/finance/treasury?voucher=2026-F4-0012"
+            className="px-6 py-2.5 bg-brand-gold text-brand-dark hover:bg-brand-gold-dark rounded-xl transition-all font-bold text-sm shadow-[0_4px_20px_rgba(212,175,55,0.3)] flex items-center gap-2"
           >
-            Back to Procurement
+            <Send className="w-4 h-4" /> Proceed to EFT Disbursement
           </Link>
         </div>
       </div>

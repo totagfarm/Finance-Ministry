@@ -1,5 +1,6 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useLocation } from 'react-router-dom';
 import { Activity, CheckCircle, AlertTriangle, Clock, ArrowRight, RefreshCw, XCircle, Send } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../components/ThemeProvider';
@@ -14,6 +15,10 @@ const mockBatches = [
 
 export default function EFTExecutionMonitor() {
   const { theme } = useTheme();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const incomingVoucher = queryParams.get('voucher');
+
   const isDark = theme === 'dark';
 
   return (
@@ -29,6 +34,33 @@ export default function EFTExecutionMonitor() {
           </button>
         </div>
       </div>
+
+      {/* Inter-Silo Handoff Notification */}
+      <AnimatePresence>
+        {incomingVoucher && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            className="overflow-hidden"
+          >
+            <div className="glass-panel p-6 border-l-4 border-l-brand-gold bg-brand-gold/5 flex items-center justify-between gap-6">
+               <div className="flex items-center gap-4">
+                  <div className="p-3 bg-brand-gold rounded-xl text-brand-dark">
+                     <Send className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black uppercase tracking-widest text-brand-gold">Handoff Received: IFMIS Silo</h3>
+                    <p className="text-xl font-medium text-foreground tracking-tight font-serif mt-0.5">PV #{incomingVoucher} Loaded into Execution Queue</p>
+                    <p className="text-xs text-muted font-serif italic mt-1">Beneficiary: Liberia Tech Ltd. • Amount: $35,000.00 • Statutory Match: 100% Verified</p>
+                  </div>
+               </div>
+               <button className="px-6 py-2.5 bg-brand-gold text-brand-dark rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-brand-gold/20 hover:scale-[1.02] transition-all">
+                  Sign & Disburse EFT
+               </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Status Board */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

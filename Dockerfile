@@ -1,34 +1,19 @@
-# Stage 1: Build Environment
-FROM node:20 AS builder
+# Use an official Node.js runtime as a parent image
+FROM node:20-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
 # Copy dependency manifests
 COPY package*.json ./
 
-# Install all dependencies including devDependencies for the build
-RUN npm install
-
-# Copy source code
-COPY . .
-
-# Execute the production build of the Vite application
-# This generates the 'dist' folder at the root as per vite.config.ts (../../dist)
-RUN npm run build
-
-# Stage 2: Production Runtime
-FROM node:20-slim
-
-WORKDIR /app
-
-# Copy the built distribution and the server entry point
-# server.js and dist are both at the root
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/server.js ./
-COPY --from=builder /app/package*.json ./
-
 # Install only production dependencies
 RUN npm install --omit=dev
+
+# Copy the pre-built distribution folder and the server entry point
+# We are copying the local 'dist' folder which has our verified assets
+COPY dist ./dist
+COPY server.js ./
 
 # Standard Cloud Run environmental configurations
 ENV NODE_ENV=production

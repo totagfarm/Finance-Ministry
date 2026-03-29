@@ -9,29 +9,19 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 8080;
 
-// Resolve the root distribution folder
+// Resolve the root distribution folder for verified assets
 const distPath = path.join(__dirname, 'dist');
-
-console.log(`[Statutory Server] Serving from: ${distPath}`);
-
-// Verify directory existence
-if (fs.existsSync(distPath)) {
-  const files = fs.readdirSync(distPath);
-  console.log(`[Statutory Server] Dist folder found. Contents: ${files.length} items`);
-} else {
-  console.error(`[Statutory Server] CRITICAL: Dist missing at ${distPath}`);
-  console.log(`[Statutory Server] ROOT listing: ${fs.readdirSync(__dirname)}`);
-}
 
 app.use(express.static(distPath));
 
-// Catch-all route for SPA
+// standard SPA Catch-all route
+// Ensures all client-side routes (finance, procurement, aid) are correctly served
 app.get('*', (req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    res.status(404).send('Statutory Error: Production artifacts missing.');
+    res.status(404).send(`Statutory Error: Deployment artifacts not found at ${indexPath}`);
   }
 });
 

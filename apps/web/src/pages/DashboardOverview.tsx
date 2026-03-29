@@ -27,37 +27,43 @@ export default function DashboardOverview() {
     <div className="flex flex-col gap-6 pb-12">
       {/* Dashboard Global Header & Tabs */}
       <div className="flex flex-col gap-4 border-b border-border pb-4">
-        <div className="flex justify-between items-end">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div>
-            <h1 className="text-2xl lg:text-4xl font-serif font-black text-white tracking-tight mb-2">
+            <h1 className="text-3xl lg:text-5xl font-serif font-black text-white tracking-tight mb-2">
               Command <span className="text-[#D4AF37]">Center</span>
             </h1>
-            <p className="text-sm text-slate-400 font-medium max-w-lg">
+            <p className="text-sm text-slate-400 font-medium max-w-xl leading-relaxed">
               Executive multi-view dashboard for real-time fiscal performance, automated oversight, and exception management.
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-2">
-            <div className="px-4 py-2 bg-[#D4AF37]/10 text-[#D4AF37] text-[10px] font-black uppercase tracking-widest rounded-full border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
-              Authorized Role: <span className="text-white ml-1">{currentRole}</span>
+          <div className="flex items-center gap-2">
+            <div className="px-3 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] font-black uppercase tracking-widest rounded border border-yellow-400/20">
+              Role Context: <span className="text-white ml-1">{currentRole}</span>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex overflow-x-auto custom-scrollbar gap-2 mt-2">
+        <div className="flex overflow-x-auto custom-scrollbar gap-4 mt-4 border-b border-border/10 pb-2">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabId)}
               className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap border",
+                "flex items-center gap-2.5 px-1 py-2 text-[11px] font-black tracking-[0.2em] transition-all whitespace-nowrap relative",
                activeTab === tab.id 
-                  ? "bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/50 shadow-[0_0_15px_rgba(212,175,55,0.15)]" 
-                  : "bg-transparent text-slate-500 border-transparent hover:bg-white/5 hover:text-white"
+                  ? "text-[#D4AF37]" 
+                  : "text-slate-400 hover:text-white"
               )}
             >
-              <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? "text-[#D4AF37]" : "text-slate-500")} />
+              <tab.icon className={cn("w-3.5 h-3.5", activeTab === tab.id ? "text-[#D4AF37]" : "text-slate-500")} />
               {tab.label}
+              {activeTab === tab.id && (
+                <motion.div 
+                  layoutId="activeTabUnderline"
+                  className="absolute bottom-[-9px] left-0 right-0 h-[2.5px] bg-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                />
+              )}
             </button>
           ))}
         </div>

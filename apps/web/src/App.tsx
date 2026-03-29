@@ -18,6 +18,7 @@ import AllotmentBalanceView from "./pages/finance/AllotmentBalanceView";
 import ExecutionOverview from "./pages/finance/ExecutionOverview";
 import PurchaseOrderGeneration from "./pages/finance/execution/PurchaseOrderGeneration";
 import VoucherProcessing from "./pages/finance/execution/VoucherProcessing";
+import DonorFundedProjects from "./pages/finance/DonorFundedProjects";
 import TreasuryDashboard from "./pages/finance/TreasuryDashboard";
 import PaymentDispatchWorkspace from "./pages/finance/treasury/PaymentDispatchWorkspace";
 import EFTExecutionMonitor from "./pages/finance/EFTExecutionMonitor";
@@ -85,6 +86,7 @@ export default function App() {
             <Route path="finance/execution" element={<ExecutionOverview />} />
             <Route path="finance/execution/po-generation" element={<PurchaseOrderGeneration />} />
             <Route path="finance/execution/vouchers" element={<VoucherProcessing />} />
+            <Route path="finance/donor-projects" element={<DonorFundedProjects />} />
             <Route path="finance/treasury" element={<TreasuryDashboard />} />
             <Route path="finance/treasury/dispatch" element={<PaymentDispatchWorkspace />} />
             <Route path="finance/treasury/eft" element={<EFTExecutionMonitor />} />
