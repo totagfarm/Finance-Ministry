@@ -24,50 +24,56 @@ export default function DashboardOverview() {
   ];
 
   return (
-    <div className="flex flex-col gap-6 pb-12">
-      {/* Dashboard Global Header & Tabs */}
-      <div className="flex flex-col gap-4 border-b border-border pb-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-          <div>
-            <h1 className="text-3xl lg:text-5xl font-serif font-black text-white tracking-tight mb-2">
-              Command <span className="text-[#D4AF37]">Center</span>
-            </h1>
-            <p className="text-sm text-slate-400 font-medium max-w-xl leading-relaxed">
-              Executive multi-view dashboard for real-time fiscal performance, automated oversight, and exception management.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="px-3 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] font-black uppercase tracking-widest rounded border border-yellow-400/20">
-              Role Context: <span className="text-white ml-1">{currentRole}</span>
-            </div>
-          </div>
+    <div className="flex flex-col gap-12 pb-12 relative">
+      {/* Editorial Dashboard Header */}
+      <div className="flex flex-col items-center text-center gap-8 pt-12 pb-8 border-b border-white/5 relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-px bg-gradient-to-r from-transparent via-brand-gold/50 to-transparent" />
+        
+        <div className="flex flex-col gap-3">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="px-4 py-1.5 bg-brand-gold/5 border border-brand-gold/20 text-brand-gold text-[10px] font-black uppercase tracking-[0.4em] rounded-full mx-auto"
+          >
+            Executive Command Suite
+          </motion.div>
+          <h1 className="text-5xl lg:text-8xl font-serif font-black text-white tracking-tighter leading-none">
+            Digital <span className="italic font-light text-brand-gold/80">Twin</span>
+          </h1>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex overflow-x-auto custom-scrollbar gap-4 mt-4 border-b border-border/10 pb-2">
+        <p className="text-lg text-slate-400 font-light max-w-2xl leading-relaxed font-sans">
+          A definitive, real-time command mirror of the National Treasury. 
+          Unifying 11 functional silos into a single, high-fidelity fiscal authority.
+        </p>
+
+        <div className="flex items-center gap-6 mt-4">
+          <div className="flex flex-col items-center">
+            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Active Context</span>
+            <div className="text-white font-serif italic text-sm border-b border-brand-gold/30 pb-0.5">{currentRole}</div>
+          </div>
+        </div>
+      </div>
+
+        {/* Professional Navigation Tabs (Linear Style) */}
+        <div className="flex justify-center overflow-x-auto custom-scrollbar gap-8 border-b border-white/5">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabId)}
               className={cn(
-                "flex items-center gap-2.5 px-1 py-2 text-[11px] font-black tracking-[0.2em] transition-all whitespace-nowrap relative",
+                "flex items-center gap-3 px-2 py-4 text-[10px] font-bold uppercase tracking-[0.25em] transition-all whitespace-nowrap relative border-b-2",
                activeTab === tab.id 
-                  ? "text-[#D4AF37]" 
-                  : "text-slate-400 hover:text-white"
+                  ? "border-brand-gold text-white" 
+                  : "border-transparent text-slate-500 hover:text-slate-300"
               )}
             >
-              <tab.icon className={cn("w-3.5 h-3.5", activeTab === tab.id ? "text-[#D4AF37]" : "text-slate-500")} />
+              <tab.icon className={cn("w-3.5 h-3.5", activeTab === tab.id ? "text-brand-gold" : "text-slate-600")} />
               {tab.label}
-              {activeTab === tab.id && (
-                <motion.div 
-                  layoutId="activeTabUnderline"
-                  className="absolute bottom-[-9px] left-0 right-0 h-[2.5px] bg-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.5)]"
-                />
-              )}
             </button>
           ))}
         </div>
-      </div>
+
 
       {/* Tab Content Routing */}
       <AnimatePresence mode="wait">

@@ -36,11 +36,11 @@
   .dark {
     --bg-primary: #050505;
     --text-primary: #F9FAFB;
-    --bg-surface: #111827;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --glass-bg: rgba(255, 255, 255, 0.03);
+    --bg-surface: #0A0A0B;
+    --border-color: rgba(255, 255, 255, 0.04);
+    --glass-bg: rgba(255, 255, 255, 0.015);
     --glass-border: rgba(255, 255, 255, 0.08);
-    --text-muted: rgba(255, 255, 255, 0.5);
+    --text-muted: rgba(255, 255, 255, 0.4);
   }
 
   body {
@@ -49,13 +49,46 @@
 }
 
 .glass-panel {
-  @apply bg-glass-bg backdrop-blur-xl border border-glass-border rounded-2xl shadow-xl transition-colors duration-300;
+  @apply bg-glass-bg backdrop-blur-2xl border border-glass-border rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.8)] transition-all duration-300;
+}
+
+.glass-luxury {
+  @apply bg-glass-bg backdrop-blur-3xl border border-white/5 rounded-3xl shadow-2xl relative overflow-hidden;
+  background-image: linear-gradient(to bottom right, rgba(255,255,255,0.03), transparent);
+}
+
+.glass-luxury::after {
+  content: '';
+  @apply absolute inset-0 pointer-events-none border border-white/5 rounded-3xl;
+  mask-image: linear-gradient(to bottom, black, transparent);
 }
 
 .text-gradient-gold {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-gold to-yellow-500 dark:to-yellow-200;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-gold via-yellow-200 to-brand-gold-dark;
 }
 
 .text-gradient-green {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-green to-emerald-600 dark:to-emerald-400;
+}
+
+.glow-subtle {
+  @apply absolute rounded-full blur-[100px] opacity-20 pointer-events-none mix-blend-screen;
+}
+
+.glow-gold {
+  @apply glow-subtle bg-brand-gold/40;
+}
+
+.glow-obsidian {
+  @apply glow-subtle bg-slate-800/60;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-luxury-float {
+  animation: float 6s ease-in-out infinite;
 }

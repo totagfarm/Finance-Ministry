@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../components/ThemeProvider';
+import { GlareCard } from '../../components/ui/glare-card';
 
 // --- Mock Data ---
 const mockExecutionData = [
@@ -30,33 +31,47 @@ const mockSectorData = [
   { name: 'Agriculture', value: 150 },
 ];
 
-const StatCard = ({ title, value, trend, trendValue, icon: Icon, colorClass }: any) => (
+const StatCard = ({ title, value, trend, trendValue, icon: Icon, colorClass, delay = 0, yOffset = 0 }: any) => (
   <motion.div 
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="glass-panel p-6 relative overflow-hidden group"
+    initial={{ opacity: 0, y: 30 + yOffset }}
+    animate={{ opacity: 1, y: yOffset }}
+    transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    whileHover={{ y: yOffset - 5, transition: { duration: 0.2 } }}
+    className="h-full cursor-default"
   >
-    <div className={cn("absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl opacity-20 transition-opacity group-hover:opacity-40", colorClass)} />
-    
-    <div className="flex justify-between items-start mb-4 relative z-10">
-      <div className="p-2 bg-foreground/5 rounded-lg border border-border">
-        <Icon className="w-5 h-5 text-muted" />
+    <GlareCard className="p-8 flex flex-col justify-between h-full bg-slate-950/50 backdrop-blur-xl border-white/5">
+      <div className="relative z-10 w-full">
+        <div className="flex justify-between items-start mb-6">
+          <div className="w-10 h-10 bg-white/[0.03] border border-white/5 rounded-xl flex items-center justify-center group-hover:border-brand-gold/30 transition-colors">
+            <Icon className="w-5 h-5 text-slate-400 group-hover:text-brand-gold transition-colors" />
+          </div>
+          {trend === 'up' ? (
+            <span className="text-[10px] font-black text-emerald-400 tracking-widest uppercase flex items-center gap-1.5 opacity-80">
+              <TrendingUp className="w-3 h-3" /> {trendValue}
+            </span>
+          ) : trend === 'down' ? (
+            <span className="text-[10px] font-black text-red-400 tracking-widest uppercase flex items-center gap-1.5 opacity-80">
+              <TrendingDown className="w-3 h-3" /> {trendValue}
+            </span>
+          ) : null}
+        </div>
+        
+        <div className="relative z-10">
+          <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.34em] mb-2 px-0.5">{title}</h4>
+          <div className="flex items-baseline gap-1">
+            <p className="text-4xl font-serif font-black text-white tracking-tighter">{value}</p>
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-gold/40 animate-pulse transition-opacity" />
+          </div>
+        </div>
       </div>
-      {trend === 'up' ? (
-        <span className="flex items-center gap-1 text-xs font-medium text-green-500 dark:text-green-400 bg-green-500/10 px-2 py-1 rounded-full border border-green-500/20">
-          <TrendingUp className="w-3 h-3" /> {trendValue}
-        </span>
-      ) : trend === 'down' ? (
-        <span className="flex items-center gap-1 text-xs font-medium text-red-500 dark:text-red-400 bg-red-500/10 px-2 py-1 rounded-full border border-red-500/20">
-          <TrendingDown className="w-3 h-3" /> {trendValue}
-        </span>
-      ) : null}
-    </div>
-    
-    <div className="relative z-10">
-      <h4 className="text-sm font-medium text-muted mb-1">{title}</h4>
-      <p className="text-3xl font-serif font-semibold text-foreground tracking-tight">{value}</p>
-    </div>
+
+      <div className="mt-auto pt-6 border-t border-white/5 opacity-40 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-2">
+            <div className={cn("w-1 h-1 rounded-full", colorClass)} />
+            <span className="text-[8px] uppercase tracking-widest text-slate-500 font-bold">Live Authority Mirror</span>
+        </div>
+      </div>
+    </GlareCard>
   </motion.div>
 );
 
@@ -156,13 +171,15 @@ export default function WorkspaceView({ currentRole }: { currentRole: string }) 
         { title: 'CS-DRMS Integration', desc: 'Scheduled debt portfolio sync completed with 2 minor mapping warnings.', type: 'info', time: '1d ago' },
       ];
       default: return [
-        { title: 'New Silo Handoff', desc: 'Silo 01 (IFMIS) pushed PV #2026-F4-0012 to Silo 06 (EFT) for disbursement.', type: 'info', time: 'Just now' },
-        { title: 'Meridian Migration', desc: '82% of CS-DRMS data successfully migrated to Commonwealth Meridian database.', type: 'info', time: '15m ago' },
-        { title: 'Appropriation Overrun', desc: 'Min. of Infrastructure approaching 95% of Q2 capital allocation.', type: 'warning', time: '2h ago' },
-        { title: 'DFP Reporting Due', desc: '12 Donor-Funded Projects (Silo 08) require Q3 financial submission.', type: 'warning', time: '5h ago' },
+        { title: "New Silo Handoff", desc: "Silo 01 (IFMIS) pushed PV #2026-F4-0012 to Silo 06 (EFT) for disbursement.", type: "info", time: "Just now" },
+        { title: "Meridian Migration", desc: "82% of CS-DRMS data successfully migrated to Commonwealth Meridian database.", type: "info", time: "15m ago" },
+        { title: "Appropriation Overrun", desc: "Min. of Infrastructure approaching 95% of Q2 capital allocation.", type: "warning", time: "2h ago" },
+        { title: "DFP Reporting Due", desc: "12 Donor-Funded Projects (Silo 08) require Q3 financial submission.", type: "warning", time: "5h ago" },
       ];
     }
   };
+
+  const CARD_OFFSETS = [0, 20, -10, 10];
 
   const getPipeline = () => {
     switch(currentRole) {
@@ -212,10 +229,15 @@ export default function WorkspaceView({ currentRole }: { currentRole: string }) 
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      {/* Editorial Stats Grid with depth (Designcode) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pt-8 pb-16 px-4">
         {stats.map((stat, idx) => (
-          <StatCard key={idx} {...stat} />
+          <StatCard 
+            key={idx} 
+            {...stat} 
+            delay={idx * 0.1} 
+            yOffset={CARD_OFFSETS[idx % 4]}
+          />
         ))}
       </div>
 

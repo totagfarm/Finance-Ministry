@@ -83,25 +83,28 @@ export default function GlobalShell() {
   const sidebarSections = ROLE_NAV_MAP[currentRole] || [];
 
   return (
-    <div className="flex h-screen bg-background text-foreground font-sans overflow-hidden selection:bg-brand-gold/30 selection:text-brand-gold transition-colors duration-300">
+    <div className="flex h-screen bg-background text-foreground font-sans overflow-hidden selection:bg-brand-gold/30 selection:text-brand-gold transition-colors duration-300 relative">
+      
+      {/* Dynamic Background Glows (Linear Aesthetic) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="glow-gold w-[600px] h-[600px] -top-48 -left-48" />
+        <div className="glow-obsidian w-[800px] h-[800px] -bottom-96 -right-48 opacity-10" />
+      </div>
       
       {/* Imperial Command Center Sidebar (Desktop) */}
-      <aside className="hidden md:flex flex-col w-20 lg:w-72 border-r border-[#D4AF37]/20 bg-[#0A0A0B] z-30 transition-all duration-300 pointer-events-auto">
-        <div className="h-16 flex items-center justify-center lg:justify-start lg:px-6 border-b border-border">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full overflow-hidden bg-white hidden lg:flex items-center justify-center border border-brand-gold/50 shadow-[0_0_10px_rgba(212,175,55,0.2)] shrink-0">
-              <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover" />
+      <aside className="hidden md:flex flex-col w-20 lg:w-72 border-r border-white/[0.03] bg-[#050505]/80 backdrop-blur-xl z-30 transition-all duration-300 pointer-events-auto relative">
+        <div className="h-20 flex items-center justify-center lg:justify-start lg:px-8 border-b border-white/[0.03]">
+          <Link to="/" className="flex items-center gap-4 group">
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-black hidden lg:flex items-center justify-center border border-white/10 group-hover:border-brand-gold/40 transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] shrink-0">
+              <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="hidden lg:flex flex-col justify-center">
-              <span className="text-2xl font-serif font-black tracking-[0.2em] text-[#D4AF37] leading-none">
-                TRA<span className="text-white">CE</span>
+              <span className="text-xl font-serif font-black tracking-normal text-white leading-none">
+                TRA<span className="text-brand-gold">CE</span>
               </span>
-              <span className="text-[7.5px] text-slate-500 font-bold leading-tight max-w-[160px] mt-1 normal-case tracking-widest border-t border-slate-800/50 pt-0.5">
-                Transparent Resource Allocation, Control & Execution
+              <span className="text-[8px] text-slate-500 font-bold leading-tight max-w-[140px] mt-1 uppercase tracking-tight opacity-80">
+                Digital Twin Ministry
               </span>
-            </div>
-            <div className="lg:hidden flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-white border border-brand-gold/50 shadow-sm shrink-0">
-              <img src="/logo.jpg" alt="MFDP Logo" className="w-full h-full object-cover" />
             </div>
           </Link>
         </div>
@@ -120,7 +123,7 @@ export default function GlobalShell() {
                 >
                   <div className="flex items-center gap-3">
                     <section.icon className={cn("w-5 h-5 transition-colors", isExpanded ? "text-[#D4AF37]" : "text-slate-500 group-hover:text-slate-200")} />
-                    <span className={cn("hidden lg:block font-black text-[11px] normal-case tracking-[0.2em] text-left transition-colors", isExpanded ? "text-white" : "text-slate-400 group-hover:text-slate-200")}>
+                    <span className={cn("hidden lg:block font-bold text-[13px] tracking-tight text-left transition-colors", isExpanded ? "text-white" : "text-slate-400 group-hover:text-slate-200")}>
                       {section.label}
                     </span>
                   </div>
@@ -154,15 +157,15 @@ export default function GlobalShell() {
                               key={item.label}
                               to={item.path}
                               className={cn(
-                                "py-2.5 px-4 rounded-lg transition-all duration-300 text-[10px] font-black normal-case tracking-[0.15em] relative block border border-transparent mb-1",
+                                "py-2.5 px-4 rounded-md transition-all duration-300 text-[13px] font-bold tracking-tight relative block mb-1",
                                 isItemActive 
-                                  ? "text-[#D4AF37] font-black" 
-                                  : "text-slate-500 hover:text-slate-200"
+                                  ? "text-white bg-white/[0.05] border border-white/[0.1]" 
+                                  : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]"
                               )}
                             >
                               {item.label}
                               {isItemActive && (
-                                <motion.div className="absolute left-[-16px] top-2 bottom-2 w-[2px] bg-[#D4AF37] rounded-r-full shadow-[0_0_10px_rgba(212,175,55,0.5)]" layoutId="activeNavSub" />
+                                <motion.div className="absolute left-[-20px] top-2 bottom-2 w-[1px] bg-brand-gold shadow-[0_0_8px_rgba(212,175,55,1)]" layoutId="activeNavSub" />
                               )}
                             </Link>
                           );

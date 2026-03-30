@@ -12,8 +12,10 @@ import {
   FileText,
   User,
   LayoutGrid,
-  List
+  List,
+  Activity
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 
 const WORK_ITEMS = [
@@ -56,8 +58,29 @@ const WORK_ITEMS = [
 ];
 
 export default function WorkQueue() {
+  const navigate = useNavigate();
   const [view, setView] = useState<'list' | 'grid'>('list');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleItemAction = (item: typeof WORK_ITEMS[0]) => {
+    // Mapping Work Item IDs to the appropriate high-fidelity functional routes
+    if (item.id.startsWith('AQ')) {
+        // Expenditure / Allotment Control
+        navigate(`/app/finance/allotments/new?id=${item.id}`);
+    } else if (item.id.startsWith('PR')) {
+        // NGO Accreditation
+        navigate(`/app/development/ngo?id=${item.id}`);
+    } else if (item.id.startsWith('TR')) {
+        // Treasury / EFT Exception
+        navigate(`/app/finance/treasury?id=${item.id}`);
+    } else if (item.id.startsWith('BC')) {
+        // Budgeting
+        navigate(`/app/finance/budget?id=${item.id}`);
+    } else {
+        // Default to pendings
+        navigate(`/app/pending?id=${item.id}&module=${item.title}`);
+    }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
@@ -146,12 +169,13 @@ export default function WorkQueue() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: idx * 0.05 }}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 items-center group hover:bg-brand-gold/5 transition-colors cursor-pointer"
+                onClick={() => handleItemAction(item)}
+                className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 items-center group hover:bg-brand-gold/5 transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99] border-l-2 border-transparent hover:border-brand-gold"
               >
                 <div className="col-span-1 flex items-center gap-2">
                   <div className={cn(
                     "w-2 h-2 rounded-full",
-                    item.priority === 'critical' ? "bg-red-500 animate-pulse" :
+                    item.priority === 'critical' ? "bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.5)]" :
                     item.priority === 'high' ? "bg-orange-500" : "bg-blue-500"
                   )} />
                   <span className={cn(
@@ -163,7 +187,7 @@ export default function WorkQueue() {
                 
                 <div className="col-span-2">
                   <p className="text-xs font-bold font-mono text-brand-gold mb-0.5">{item.id}</p>
-                  <p className="text-sm font-medium text-foreground">{item.title}</p>
+                  <p className="text-sm font-medium text-foreground group-hover:text-brand-gold transition-colors">{item.title}</p>
                 </div>
 
                 <div className="col-span-4">
@@ -185,8 +209,11 @@ export default function WorkQueue() {
                 </div>
 
                 <div className="col-span-1 text-right">
-                  <button className="w-8 h-8 rounded-full bg-foreground/10 flex items-center justify-center hover:bg-brand-gold hover:text-white transition-all transform group-hover:scale-110 ml-auto">
-                    <ArrowRight className="w-4 h-4" />
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); handleItemAction(item); }}
+                    className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center hover:bg-brand-gold hover:text-white transition-all transform group-hover:scale-110 ml-auto border border-white/5 shadow-xl"
+                  >
+                    <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>
               </motion.div>
@@ -232,19 +259,3 @@ export default function WorkQueue() {
   );
 }
 
-const Activity = ({ className }: { className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-  </svg>
-);
